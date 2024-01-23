@@ -1,0 +1,32 @@
+class Person {
+    late String firstName;
+    late String lastName;
+  
+ Person(String firstName, String lastName){    
+   this.firstName= firstName;    
+   this.lastName = lastName;
+ }
+    String getFullName() { 
+       return "$firstName $lastName";
+   }
+  
+}
+
+class Employee extends Person {
+  late int employeeID;  
+  Employee(String firstName,String lastName,int employeeID):super(firstName, lastName)
+{
+  this.employeeID=employeeID; //initialise employeeID
+}
+  int getID() {    
+    return employeeID;  
+  } 
+} 
+
+main() {
+
+  Employee somePerson =  new Employee('Clark','Kent',999);
+  
+  print(somePerson.getFullName());
+  print(somePerson.getID());
+}
