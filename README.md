@@ -1,6 +1,5 @@
-# Morning Weather
+# <img src="https://github.com/zczqxc5/casa0015-mobile-assessment/blob/main/Resourses/Untitled-1.png" width=10% height=10%> Morning Weather
 Your best weather helper
-![alt text](https://github.com/zczqxc5/casa0015-mobile-assessment/blob/main/Resourses/Untitled-1.png)
 
 
 ## stroyboard
