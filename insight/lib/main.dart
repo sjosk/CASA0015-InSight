@@ -46,6 +46,7 @@ class HomePage extends StatelessWidget {
               children: <Widget>[
                 _buildClickableArea(
                   context,
+                  icon: Icon(Icons.route),
                   text: 'Indoor Guidance',
                   onTap: () {
                     
@@ -53,6 +54,7 @@ class HomePage extends StatelessWidget {
                 ),
                 _buildClickableArea(
                   context,
+                  icon: Icon(Icons.elevator_rounded),
                   text: 'Floor Transition',
                   onTap: () {
                     
@@ -60,6 +62,7 @@ class HomePage extends StatelessWidget {
                 ),
                 _buildClickableArea(
                   context,
+                  icon: Icon(Icons.directions_walk),
                   text: 'Emergency',
                   onTap: () {
                     
@@ -73,7 +76,8 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  Widget _buildClickableArea(BuildContext context, {required String text, required VoidCallback onTap}) {
+  Widget _buildClickableArea(BuildContext context, {required Icon icon, required String text, required VoidCallback onTap}) {
+    Icon adjustedIcon = Icon(icon.icon, size: 40.0, color: icon.color);
     return Semantics(
       button: true,
       label: text,
@@ -88,15 +92,20 @@ class HomePage extends StatelessWidget {
               bottom: BorderSide(color: Theme.of(context).dividerColor),
             ),
           ),
-          child: Center(
-            child: Text(
-              text,
-              style: TextStyle(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              adjustedIcon,
+              SizedBox(width: 10), 
+              Text(
+                text,
+                style: TextStyle(
                 fontSize: 24.0,
                 fontWeight: FontWeight.bold,
                 color: Theme.of(context).primaryColorDark,
               ),
             ),
+            ], //Children
           ),
         ),
       ),
