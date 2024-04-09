@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:vibration/vibration.dart';
+import 'indoor_navigation_stot.dart'; 
+
 
 void main() => runApp(MyApp());
 
@@ -10,7 +12,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'InSight',
       theme: ThemeData(
-        primarySwatch: Colors.blueGrey,
+        primaryColor: Colors.yellow[700],
+        primaryColorDark: Colors.black,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: HomePage(),
@@ -49,7 +52,10 @@ class HomePage extends StatelessWidget {
                   icon: Icon(Icons.route),
                   text: 'Indoor Guidance',
                   onTap: () {
-                    
+                     Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => IndoorNavigationPage()),
+                         );
                   },
                 ),
                 _buildClickableArea(
@@ -87,7 +93,7 @@ class HomePage extends StatelessWidget {
         child: Container(
           padding: EdgeInsets.symmetric(vertical: 100.0),
           decoration: BoxDecoration(
-            color: Theme.of(context).primaryColorLight,
+            color: Theme.of(context).primaryColor,
             border: Border(
               bottom: BorderSide(color: Theme.of(context).dividerColor),
             ),
