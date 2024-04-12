@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:weatherapp/models/weather_model.dart';
 import 'package:weatherapp/serices/weather_service.dart';
+
 
 class AlarmPop extends StatefulWidget {
   const AlarmPop({super.key});
@@ -18,7 +20,7 @@ class _MyWidgetState extends State<AlarmPop> {
   _fetchWeather() async {
     //get the current city
     String cityName = await _weatherService.getCurrentCity();
-
+    print('cityName:${cityName}');
     //get weather for city
     try {
       final weather = await _weatherService.getWeather(cityName);
@@ -54,6 +56,9 @@ class _MyWidgetState extends State<AlarmPop> {
           children: [
             //city name
             Text(_weather?.cityName ?? "loading city..."),
+
+            //animation
+            Lottie.asset('assets/Rain.json'),
 
             //temperature
             Text('${_weather?.temperature.round()}℃')

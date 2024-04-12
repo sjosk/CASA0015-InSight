@@ -1,7 +1,7 @@
 class Weather{
   final String cityName;
   final double temperature;
-  final Stream mainCondition;
+  final String mainCondition;
 
   Weather({
     required this.cityName,
