@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:weatherapp/models/weather_model.dart';
-import 'package:weatherapp/serices/weather_service.dart';
+import 'package:weatherapp/services/weather_service.dart';
 
 
 class AlarmPop extends StatefulWidget {

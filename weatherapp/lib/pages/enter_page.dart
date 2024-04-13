@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:weatherapp/MainScreen.dart';
+import 'package:weatherapp/pages/subscribe_city.dart';
 
 
 class EnterPage extends StatelessWidget {
@@ -45,7 +45,7 @@ class EnterPage extends StatelessWidget {
                 SizedBox(height: 25),
                 ElevatedButton(
                    child: Text(
-                    'Enter',
+                    'Next',
                     style: TextStyle(
                       fontSize: 16, 
                       color: const Color.fromRGBO(167, 73, 63, 1), 
@@ -54,7 +54,7 @@ class EnterPage extends StatelessWidget {
                   onPressed: () {
                 Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(builder: (context) => MainScreen()),
+                  MaterialPageRoute(builder: (context) => SubscribeCitiesPage()),
                 );
               },
                   style: ButtonStyle(

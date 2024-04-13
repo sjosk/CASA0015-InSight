@@ -31,6 +31,7 @@ dependencies:
   flutter:
     sdk: flutter
   shared_preferences: ^2.0.13
+  
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -40,6 +41,8 @@ dependencies:
   geolocator: ^11.0.0
   geocoding: ^3.0.0
   lottie: ^3.1.0
+  permission_handler: ^8.0.0  
+
 
 dev_dependencies:
   flutter_test:
@@ -68,6 +71,7 @@ flutter:
       - assets/Rain.json
       - assets/images/enterBackground.png
       - assets/images/logo.png
+      - assets/images/subscribeBack.png
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
