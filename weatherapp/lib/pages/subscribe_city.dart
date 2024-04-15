@@ -10,6 +10,7 @@ class SubscribeCitiesPage extends StatefulWidget {
 
 class _SubscribeCitiesPageState extends State<SubscribeCitiesPage> {
   TextEditingController _controller = TextEditingController();
+  bool isKeyboardVisible = false;
 
   @override
   void dispose() {
@@ -22,7 +23,8 @@ class _SubscribeCitiesPageState extends State<SubscribeCitiesPage> {
     "London",
     "Tokyo",
     "Paris",
-    "Berlin"
+    'Sydney',
+    'Beijing',
   ];
   List<String> selectedCities = [];
   List<String> searchResults = [];
@@ -34,9 +36,10 @@ class _SubscribeCitiesPageState extends State<SubscribeCitiesPage> {
   @override
   void initState() {
     super.initState();
-    getCurrentCityName();
+    weatherService = WeatherService('apiKey');
     cityService =
         CityService('9eda19280bmsh39cab15c5637f74p102d5cjsnc784311a0d1d');
+    getCurrentCityName();
   }
 
   void getCurrentCityName() async {
@@ -45,7 +48,7 @@ class _SubscribeCitiesPageState extends State<SubscribeCitiesPage> {
       if (cityName.isNotEmpty) {
         setState(() {
           currentCity = cityName;
-          selectedCities.add(cityName); // Adds to the list of selected cities
+          updateCityList(cityName, isCurrentCity: true);
         });
       } else {
         setState(() {
@@ -55,6 +58,14 @@ class _SubscribeCitiesPageState extends State<SubscribeCitiesPage> {
     } catch (e) {
       setState(() {
         currentCity = "Error getting city: $e";
+      });
+    }
+  }
+
+  void updateCityList(String cityName, {bool isCurrentCity = false}) {
+    if (!selectedCities.contains(cityName)) {
+      setState(() {
+        selectedCities.add(cityName);
       });
     }
   }
@@ -84,11 +95,25 @@ class _SubscribeCitiesPageState extends State<SubscribeCitiesPage> {
   }
 
   // Helper method to build city tiles
-  Widget buildCityTile(String city) {
+  Widget buildCityTile(String city, {bool isCurrentCity = false}) {
     return ListTile(
-      title: Text(
-        city,
-        style: TextStyle(color: const Color.fromRGBO(35, 35, 35, 1)),
+      title: Row(
+        children: [
+          Expanded(
+            child: Text(
+              city,
+              style: TextStyle(color: const Color.fromRGBO(35, 35, 35, 1)),
+            ),
+          ),
+          if (isCurrentCity)
+            Text(
+              'current city',
+              style: TextStyle(
+                color: Colors.grey,
+                fontSize: 12,
+              ),
+            ),
+        ],
       ),
       onTap: () {
         setState(() {
@@ -101,6 +126,8 @@ class _SubscribeCitiesPageState extends State<SubscribeCitiesPage> {
   }
 
   Widget build(BuildContext context) {
+    isKeyboardVisible = MediaQuery.of(context).viewInsets.bottom != 0;
+
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(
@@ -155,57 +182,95 @@ class _SubscribeCitiesPageState extends State<SubscribeCitiesPage> {
                     controller:
                         _controller, // Add the TextEditingController Controller
                   )),
-              Padding(
-                padding: EdgeInsets.all(8.0),
-                child: Text("Selected",
-                    style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: const Color.fromRGBO(35, 35, 35, 1))),
-              ),
-              ...selectedCities
-                  .map((city) => ListTile(
-                        title: Text(city,
-                            style: TextStyle(
-                                color: const Color.fromRGBO(35, 35, 35, 1))),
-                        trailing: IconButton(
-                          icon: Icon(Icons.delete,
-                              color: const Color.fromRGBO(167, 73, 63, 1)),
-                          onPressed: () {
-                            setState(() {
-                              selectedCities.remove(city);
-                            });
-                          },
-                        ),
-                      ))
-                  .toList(),
+              if (!isKeyboardVisible)
+                Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Text("Selected",
+                      style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: const Color.fromRGBO(35, 35, 35, 1))),
+                ),
+              if (!isKeyboardVisible)
+                Container(
+                  height: 210,
+                  padding: EdgeInsets.only(bottom: 20),
+                  child: ListView(
+                    padding: EdgeInsets.zero,
+                    children: selectedCities
+                        .map((city) => ListTile(
+                              title: Row(
+                                children: [
+                                  Expanded(
+                                    child: Text(city,
+                                        style: TextStyle(
+                                            color: const Color.fromRGBO(
+                                                35, 35, 35, 1))),
+                                  ),
+                                  if (city == currentCity)
+                                    Container(
+                                      margin: EdgeInsets.only(left: 8),
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 6, vertical: 2),
+                                      decoration: BoxDecoration(
+                                        color: Colors.red[300],
+                                        borderRadius: BorderRadius.circular(4),
+                                      ),
+                                      child: Text('current city',
+                                          style: TextStyle(
+                                            fontSize: 12,
+                                            color: Colors.white,
+                                          )),
+                                    ),
+                                ],
+                              ),
+                              trailing: IconButton(
+                                icon: Icon(Icons.delete,
+                                    color:
+                                        const Color.fromRGBO(167, 73, 63, 1)),
+                                onPressed: () {
+                                  setState(() {
+                                    selectedCities.remove(city);
+                                  });
+                                },
+                              ),
+                            ))
+                        .toList(),
+                  ),
+                ),
               Expanded(
                 child: ListView.builder(
+                  padding: EdgeInsets.zero, 
                   itemCount: isSearching
-                      ? (searchResults.isNotEmpty ? searchResults.length : 1)
-                      : famousCities.length,
+                      ? searchResults
+                          .where((city) => !selectedCities.contains(city))
+                          .length
+                      : famousCities
+                          .where((city) => !selectedCities.contains(city))
+                          .length,
                   itemBuilder: (context, index) {
                     final city = isSearching
-                        ? searchResults[index]
-                        : famousCities[index]; 
+                        ? searchResults
+                            .where((city) => !selectedCities.contains(city))
+                            .toList()[index]
+                        : famousCities
+                            .where((city) => !selectedCities.contains(city))
+                            .toList()[index];
                     return InkWell(
                       onTap: () {
                         setState(() {
-                          if (!selectedCities.contains(city)) {
-                            selectedCities.add(city); 
-                          }
+                          selectedCities.add(city);
                         });
                       },
                       child: Container(
-                        padding: EdgeInsets.symmetric(
-                            vertical: 10, horizontal: 15), 
+                        padding:
+                            EdgeInsets.symmetric(vertical: 10, horizontal: 15),
                         child: Row(
                           children: [
                             Icon(Icons.add,
-                                color: const Color.fromRGBO(
-                                    167, 73, 63, 1)), 
-                            SizedBox(width: 10), 
-                            Text(city), 
+                                color: const Color.fromRGBO(167, 73, 63, 1)),
+                            SizedBox(width: 10),
+                            Text(city),
                           ],
                         ),
                       ),
@@ -213,28 +278,32 @@ class _SubscribeCitiesPageState extends State<SubscribeCitiesPage> {
                   },
                 ),
               ),
-              Padding(
-                padding: EdgeInsets.only(bottom: 80),
-                child: Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => MainScreen()),
-                      );
-                    },
-                    child: Text("Enter"),
-                    style: ElevatedButton.styleFrom(
-                      primary: Color.fromRGBO(250, 235, 216, 1),
-                      onPrimary: const Color.fromRGBO(35, 35, 35, 1),
-                      padding: EdgeInsets.symmetric(
-                          horizontal: 35.0, vertical: 12.0),
-                      textStyle: TextStyle(fontSize: 16),
-                    ),
-                  )
-                ]),
-              ),
+              if (!isKeyboardVisible)
+                Padding(
+                  padding: EdgeInsets.only(bottom: 80),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => MainScreen()),
+                          );
+                        },
+                        child: Text("Enter"),
+                        style: ElevatedButton.styleFrom(
+                          primary: Color.fromRGBO(250, 235, 216, 1),
+                          onPrimary: const Color.fromRGBO(35, 35, 35, 1),
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 35.0, vertical: 12.0),
+                          textStyle: TextStyle(fontSize: 16),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
             ],
           ),
         ),

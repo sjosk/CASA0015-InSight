@@ -27,12 +27,19 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+    extendBody: true, 
+    backgroundColor: Colors.transparent, 
+
       body: Center(
         child: _widgetOptions.elementAt(_selectedIndex),
       ),
       bottomNavigationBar: Container(
         height: 80,
+        decoration: BoxDecoration(
+          color: Colors.transparent, 
+        ),
         child: BottomNavigationBar(
+          elevation: 0,
           items: const <BottomNavigationBarItem>[
             BottomNavigationBarItem(
               icon: Padding(
@@ -56,7 +63,7 @@ class _MainScreenState extends State<MainScreen> {
           ],
           currentIndex: _selectedIndex,
           selectedItemColor: Color.fromRGBO(247, 160, 90, 1),
-          backgroundColor: const Color.fromRGBO(39, 68, 76, 1),
+          backgroundColor: Colors.transparent,
           unselectedItemColor: Color.fromARGB(255, 197, 197, 197),
           onTap: _onItemTapped,
           selectedLabelStyle: TextStyle(fontSize: 12),

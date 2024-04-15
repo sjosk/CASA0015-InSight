@@ -72,6 +72,7 @@ flutter:
       - assets/images/enterBackground.png
       - assets/images/logo.png
       - assets/images/subscribeBack.png
+      - assets/images/Backgroundrain.png
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
