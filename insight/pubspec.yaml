@@ -33,6 +33,7 @@ dependencies:
   flutter_tts: ^3.2.2
   vibration: ^1.7.3
   speech_to_text: ^6.6.1
+  flutter_beacon: ^0.5.1
 
 
   # The following adds the Cupertino Icons font to your application.

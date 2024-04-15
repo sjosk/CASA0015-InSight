@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_beacon/flutter_beacon.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:vibration/vibration.dart';
 import 'indoor_navigation_stot.dart'; 
+
 
 
 void main() => runApp(MyApp());
