@@ -45,7 +45,7 @@ dependencies:
   geocoding: ^3.0.0
   lottie: ^3.1.0
   permission_handler: ^8.0.0  
-
+  
 
 dev_dependencies:
   flutter_test:
@@ -76,6 +76,15 @@ flutter:
       - assets/images/logo.png
       - assets/images/subscribeBack.png
       - assets/images/Backgroundrain.png
+      - assets/images/Backgroundlight.png
+      - assets/icons/clear.png
+      - assets/icons/clearselected.png
+      - assets/icons/clouds.png
+      - assets/icons/cloudsselect.png
+      - assets/icons/rain.png
+      - assets/icons/rainselect.png
+      - assets/icons/snow.png
+      - assets/icons/snowselect.png
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

@@ -55,33 +55,50 @@ class _MyWidgetState extends State<WeatherPage> {
     print(forecastData);
   }
 
- void _parseForecastData(String data) {
-  RegExp regExp = RegExp(
-      r'--- time:(.*?) ---\s*weather:(.*?)\stemp:(.*?)°C\s*',
-      dotAll: true);
-  Iterable<Match> matches = regExp.allMatches(data);
+  void _parseForecastData(String data) {
+    RegExp regExp = RegExp(
+        r'--- time:(.*?) ---\s*weather:(.*?)\stemp:(.*?)°C\s*',
+        dotAll: true);
+    Iterable<Match> matches = regExp.allMatches(data);
 
-  List<HourlyWeather> parsedData = [];
-  for (var match in matches) {
-    parsedData.add(HourlyWeather(
-      weather: match.group(2)!.trim(), // Group 2 is the weather
-      temperature: double.parse(match.group(3)!), // Group 3 is the temperature
-      time: match.group(1)!.trim(), // Group 1 is the time
-    ));
+    List<HourlyWeather> parsedData = [];
+    for (var match in matches) {
+      parsedData.add(HourlyWeather(
+        weather: match.group(2)!.trim(), // Group 2 is the weather
+        temperature:
+            double.parse(match.group(3)!), // Group 3 is the temperature
+        time: match.group(1)!.trim(), // Group 1 is the time
+      ));
+    }
+
+    if (parsedData.isEmpty) {
+      print('No data parsed. Check the regular expression.');
+    } else {
+      setState(() {
+        hourlyForecast = parsedData;
+      });
+    }
   }
 
-  if (parsedData.isEmpty) {
-    print('No data parsed. Check the regular expression.');
-  } else {
-    setState(() {
-      hourlyForecast = parsedData;
-    });
+  String getIconPath(String weatherDescription) {
+    switch (weatherDescription) {
+      case 'Clear':
+        return 'assets/icons/clear.png';
+      case 'Clouds':
+        return 'assets/icons/clouds.png';
+      case 'Rain':
+        return 'assets/icons/rain.png';
+      case 'Snow':
+        return 'assets/icons/snow.png';
+      default:
+        return 'assets/icons/clouds.png';
+    }
   }
-}
-
 
   @override
   Widget build(BuildContext context) {
+    String iconPath =getIconPath('${_weather?.mainCondition}');
+
     int maxTempIndex = 0;
     int minTempIndex = 0;
     double maxTemp = double.negativeInfinity;
@@ -106,6 +123,7 @@ class _MyWidgetState extends State<WeatherPage> {
     // Gets the width and height of the screen
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
+
     return Scaffold(
       body: Container(
         width: screenWidth,
@@ -116,10 +134,15 @@ class _MyWidgetState extends State<WeatherPage> {
             fit: BoxFit.cover,
           ),
         ),
+        
         child: SingleChildScrollView(
+          
           child: Column(
+            
             children: <Widget>[
+              
               Container(
+                
                 padding: EdgeInsets.only(top: 70, bottom: 60),
                 height: 270,
                 child: ListView(
@@ -136,8 +159,17 @@ class _MyWidgetState extends State<WeatherPage> {
                                   _fetchForecastData();
                                 });
                               },
-                              child: Text(city),
-                              style: TextButton.styleFrom(
+                              
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                                children:<Widget>[
+                              Text(city),
+                               Image.asset(iconPath, width: 40, height: 40),
+                                ],
+                              
+                            ),
+                            style: TextButton.styleFrom(
                                 backgroundColor: Colors.white,
                                 padding: EdgeInsets.all(8),
                                 textStyle: TextStyle(fontSize: 16),
@@ -180,8 +212,20 @@ class _MyWidgetState extends State<WeatherPage> {
                   ],
                 ),
               ),
+               Container(
+                padding: EdgeInsets.only(top: 20, left: 40, right: 40,bottom:0),
+                alignment: Alignment.centerLeft, 
+                child: Text(
+                  '24 hours weather forecast',
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Colors.white,
+                   
+                  ),
+                ),
+              ),
               Container(
-                padding: EdgeInsets.only(top: 0, left: 40, right: 40),
+                padding: EdgeInsets.only(left: 40, right: 40),
                 height: 150,
                 child: MediaQuery.removePadding(
                   context: context,
@@ -195,6 +239,7 @@ class _MyWidgetState extends State<WeatherPage> {
                     itemCount: hourlyForecast.length,
                     itemBuilder: (context, index) {
                       var forecast = hourlyForecast[index];
+                      String iconPath = getIconPath(forecast.weather);
                       return Padding(
                         padding: EdgeInsets.only(
                           left: index == 0 ? 0 : 20,
@@ -206,13 +251,14 @@ class _MyWidgetState extends State<WeatherPage> {
                           children: <Widget>[
                             Text(forecast.time,
                                 style: TextStyle(
-                                    color: Colors.white, fontSize: 14)),
+                                    color: Colors.white, fontSize: 12)),
+                            Image.asset(iconPath, width: 40, height: 40),
                             Text(forecast.weather,
                                 style: TextStyle(
-                                    color: Colors.white, fontSize: 18)),
+                                    color: Colors.white, fontSize: 12)),
                             Text('${forecast.temperature.toStringAsFixed(1)}°C',
                                 style: TextStyle(
-                                    color: Colors.white, fontSize: 16)),
+                                    color: Colors.white, fontSize: 12)),
                           ],
                         ),
                       );
@@ -220,6 +266,7 @@ class _MyWidgetState extends State<WeatherPage> {
                   ),
                 ),
               ),
+             
               Container(
                   padding: EdgeInsets.only(top: 0, left: 50, right: 50),
                   height: 60,
@@ -247,13 +294,13 @@ class _MyWidgetState extends State<WeatherPage> {
                         show: true,
                         topTitles: SideTitles(
                           showTitles: true,
-                          reservedSize: 0, 
+                          reservedSize: 0,
                           getTitles: (value) {
                             if (value.toInt() == maxTempIndex) {
-                              return 'max'; 
+                              return 'max';
                             }
-                            
-                            return ''; 
+
+                            return '';
                           },
                           getTextStyles: (context, value) => const TextStyle(
                             color: Colors.red,
@@ -263,13 +310,12 @@ class _MyWidgetState extends State<WeatherPage> {
                         ),
                         bottomTitles: SideTitles(
                           showTitles: true,
-                          reservedSize: 0, 
+                          reservedSize: 0,
                           getTitles: (value) {
-                           
                             if (value.toInt() == minTempIndex) {
-                              return 'min'; 
+                              return 'min';
                             }
-                            return ''; 
+                            return '';
                           },
                           getTextStyles: (context, value) => const TextStyle(
                             color: Colors.red,

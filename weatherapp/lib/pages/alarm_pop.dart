@@ -3,65 +3,65 @@ import 'package:lottie/lottie.dart';
 import 'package:weatherapp/models/weather_model.dart';
 import 'package:weatherapp/services/weather_service.dart';
 
-
 class AlarmPop extends StatefulWidget {
   const AlarmPop({super.key});
 
   @override
-  State<AlarmPop> createState() => _MyWidgetState();
+  State<AlarmPop> createState() => _AlarmPopState();
 }
 
-class _MyWidgetState extends State<AlarmPop> {
-  //api key
+class _AlarmPopState extends State<AlarmPop> {
   final _weatherService = WeatherService('7fbf36e5c795251df28123b325f63eef');
   Weather? _weather;
 
-  //fetch weather
   _fetchWeather() async {
-    //get the current city
-    String cityName = await _weatherService.getCurrentCity();
-    print('cityName:${cityName}');
-    //get weather for city
     try {
+      String cityName = await _weatherService.getCurrentCity();
       final weather = await _weatherService.getWeather(cityName);
       setState(() {
         _weather = weather;
       });
-    }
-
-    //any errors
-    catch (e) {
+    } catch (e) {
       print(e);
     }
   }
 
-  //weather animations
-
-  //init state
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-
-    //fetch weather on startup
     _fetchWeather();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text("Alarm"),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.close),
+            onPressed: () => Navigator.pop(context), // 关闭闹钟页面的按钮
+          ),
+        ],
+      ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            //city name
-            Text(_weather?.cityName ?? "loading city..."),
-
-            //animation
-            Lottie.asset('assets/Rain.json'),
-
-            //temperature
-            Text('${_weather?.temperature.round()}℃')
+            Text("Wake up!",
+                style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold)),
+            SizedBox(height: 20),
+            Text(_weather?.cityName ?? "Loading city..."),
+            if (_weather != null) Lottie.asset('assets/Rain.json'),
+            Text('${_weather?.temperature.round() ?? "..."}℃'),
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pop(context);
+                // 需要有办法调用ClockPage的resetAlarm方法，可能需要通过callback或者state management解决
+              },
+              child: Text('Stop Alarm'),
+            ),
           ],
         ),
       ),
