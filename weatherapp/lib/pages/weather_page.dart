@@ -1,3 +1,6 @@
+import 'package:fl_chart/fl_chart.dart';
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:weatherapp/models/weather_model.dart';
 import 'package:weatherapp/services/weather_service.dart';
@@ -52,33 +55,54 @@ class _MyWidgetState extends State<WeatherPage> {
     print(forecastData);
   }
 
-  void _parseForecastData(String data) {
-    RegExp regExp = RegExp(
-        r'temp:(.*?)°C\s*--- time:(.*?) ---\s*weather:(.*?)\s',
-        dotAll: true);
-    Iterable<Match> matches = regExp.allMatches(data);
+ void _parseForecastData(String data) {
+  RegExp regExp = RegExp(
+      r'--- time:(.*?) ---\s*weather:(.*?)\stemp:(.*?)°C\s*',
+      dotAll: true);
+  Iterable<Match> matches = regExp.allMatches(data);
 
-    List<HourlyWeather> parsedData = [];
-    for (var match in matches) {
-      parsedData.add(HourlyWeather(
-        weather: match.group(3)!.trim(), // Group 3 is the weather
-        temperature:
-            double.parse(match.group(1)!), // Group 1 is the temperature
-        time: match.group(2)!.trim(), // Group 2 is the time
-      ));
-    }
-
-    if (parsedData.isEmpty) {
-      print('No data parsed. Check the regular expression.');
-    } else {
-      setState(() {
-        hourlyForecast = parsedData;
-      });
-    }
+  List<HourlyWeather> parsedData = [];
+  for (var match in matches) {
+    parsedData.add(HourlyWeather(
+      weather: match.group(2)!.trim(), // Group 2 is the weather
+      temperature: double.parse(match.group(3)!), // Group 3 is the temperature
+      time: match.group(1)!.trim(), // Group 1 is the time
+    ));
   }
+
+  if (parsedData.isEmpty) {
+    print('No data parsed. Check the regular expression.');
+  } else {
+    setState(() {
+      hourlyForecast = parsedData;
+    });
+  }
+}
+
 
   @override
   Widget build(BuildContext context) {
+    int maxTempIndex = 0;
+    int minTempIndex = 0;
+    double maxTemp = double.negativeInfinity;
+    double minTemp = double.infinity;
+
+    for (int i = 0; i < hourlyForecast.length; i++) {
+      double temp = hourlyForecast[i].temperature;
+      if (temp > maxTemp) {
+        maxTemp = temp;
+        maxTempIndex = i;
+      }
+      if (temp < minTemp) {
+        minTemp = temp;
+        minTempIndex = i;
+      }
+    }
+    List<FlSpot> spots = hourlyForecast
+        .asMap()
+        .entries
+        .map((entry) => FlSpot(entry.key.toDouble(), entry.value.temperature))
+        .toList();
     // Gets the width and height of the screen
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
@@ -157,27 +181,24 @@ class _MyWidgetState extends State<WeatherPage> {
                 ),
               ),
               Container(
-                padding: EdgeInsets.only(
-                    top: 0, left: 40, right: 40), // 移除了right: 40
+                padding: EdgeInsets.only(top: 0, left: 40, right: 40),
                 height: 150,
                 child: MediaQuery.removePadding(
                   context: context,
                   removeTop: true,
                   removeBottom: true,
-                  removeLeft: true, 
-                  removeRight: true, 
+                  removeLeft: true,
+                  removeRight: true,
                   child: ListView.builder(
-                    padding: EdgeInsets.zero, 
+                    padding: EdgeInsets.zero,
                     scrollDirection: Axis.horizontal,
                     itemCount: hourlyForecast.length,
                     itemBuilder: (context, index) {
                       var forecast = hourlyForecast[index];
                       return Padding(
                         padding: EdgeInsets.only(
-                          left: index == 0 ? 0 : 20, 
-                          right: index == hourlyForecast.length - 1
-                              ? 40
-                              : 20, 
+                          left: index == 0 ? 0 : 20,
+                          right: index == hourlyForecast.length - 1 ? 40 : 20,
                         ),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -200,12 +221,101 @@ class _MyWidgetState extends State<WeatherPage> {
                 ),
               ),
               Container(
-                height: 100,
-                color: Colors.grey[300],
-                child: Center(
-                    child: Text('Line Chart Placeholder',
-                        style: TextStyle(color: Colors.black))),
-              ),
+                  padding: EdgeInsets.only(top: 0, left: 50, right: 50),
+                  height: 60,
+                  color: Colors.transparent,
+                  child: LineChart(
+                    LineChartData(
+                      lineTouchData: LineTouchData(
+                        touchTooltipData: LineTouchTooltipData(
+                          tooltipBgColor: Colors.blueAccent,
+                          getTooltipItems: (List<LineBarSpot> touchedBarSpots) {
+                            return touchedBarSpots.map((barSpot) {
+                              final flSpot = barSpot;
+                              return LineTooltipItem(
+                                '${flSpot.y.toStringAsFixed(2)}°C at ${hourlyForecast[flSpot.x.toInt()].time}:00',
+                                const TextStyle(color: Colors.white),
+                              );
+                            }).toList();
+                          },
+                        ),
+                        touchCallback: (LineTouchResponse touchResponse) {},
+                        handleBuiltInTouches: true,
+                      ),
+                      gridData: FlGridData(show: false),
+                      titlesData: FlTitlesData(
+                        show: true,
+                        topTitles: SideTitles(
+                          showTitles: true,
+                          reservedSize: 0, 
+                          getTitles: (value) {
+                            if (value.toInt() == maxTempIndex) {
+                              return 'max'; 
+                            }
+                            
+                            return ''; 
+                          },
+                          getTextStyles: (context, value) => const TextStyle(
+                            color: Colors.red,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 12,
+                          ),
+                        ),
+                        bottomTitles: SideTitles(
+                          showTitles: true,
+                          reservedSize: 0, 
+                          getTitles: (value) {
+                           
+                            if (value.toInt() == minTempIndex) {
+                              return 'min'; 
+                            }
+                            return ''; 
+                          },
+                          getTextStyles: (context, value) => const TextStyle(
+                            color: Colors.red,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 12,
+                          ),
+                        ),
+                        leftTitles: SideTitles(showTitles: false),
+                        rightTitles: SideTitles(showTitles: false),
+                      ),
+                      borderData: FlBorderData(show: false),
+                      minX: 0,
+                      maxX: hourlyForecast.length.toDouble() - 1,
+                      minY:
+                          hourlyForecast.map((e) => e.temperature).reduce(min),
+                      maxY:
+                          hourlyForecast.map((e) => e.temperature).reduce(max),
+                      lineBarsData: [
+                        LineChartBarData(
+                          spots: spots,
+                          isCurved: true,
+                          colors: [Colors.blue],
+                          barWidth: 2,
+                          isStrokeCapRound: true,
+                          dotData: FlDotData(
+                              show: true,
+                              getDotPainter: (spot, percent, barData, index) {
+                                if (index == maxTempIndex ||
+                                    index == minTempIndex) {
+                                  return FlDotCirclePainter(
+                                    radius: 4,
+                                    color: Colors.red,
+                                    strokeWidth: 2,
+                                    strokeColor: Colors.white,
+                                  );
+                                } else {
+                                  return FlDotCirclePainter(
+                                    radius: 0,
+                                  );
+                                }
+                              }),
+                          belowBarData: BarAreaData(show: false),
+                        ),
+                      ],
+                    ),
+                  ))
             ],
           ),
         ),
