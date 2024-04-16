@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:weatherapp/services/weather_service.dart';
 import 'package:weatherapp/services/cityname_service.dart';
 import 'package:weatherapp/MainScreen.dart';
+import 'package:weatherapp/globalmanager/globalcities.dart';
 
 class SubscribeCitiesPage extends StatefulWidget {
   @override
   _SubscribeCitiesPageState createState() => _SubscribeCitiesPageState();
 }
+
 
 class _SubscribeCitiesPageState extends State<SubscribeCitiesPage> {
   TextEditingController _controller = TextEditingController();
@@ -26,7 +28,7 @@ class _SubscribeCitiesPageState extends State<SubscribeCitiesPage> {
     'Sydney',
     'Beijing',
   ];
-  List<String> selectedCities = [];
+ 
   List<String> searchResults = [];
   bool isSearching = false;
   String currentCity = "Getting current location...";
@@ -63,9 +65,9 @@ class _SubscribeCitiesPageState extends State<SubscribeCitiesPage> {
   }
 
   void updateCityList(String cityName, {bool isCurrentCity = false}) {
-    if (!selectedCities.contains(cityName)) {
+    if (!GlobalCitiesManager().selectedCities.contains(cityName)) {
       setState(() {
-        selectedCities.add(cityName);
+        GlobalCitiesManager().selectedCities.add(cityName);
       });
     }
   }
@@ -117,8 +119,8 @@ class _SubscribeCitiesPageState extends State<SubscribeCitiesPage> {
       ),
       onTap: () {
         setState(() {
-          if (!selectedCities.contains(city)) {
-            selectedCities.add(city);
+          if (!GlobalCitiesManager().selectedCities.contains(city)) {
+            GlobalCitiesManager().selectedCities.add(city);
           }
         });
       },
@@ -126,6 +128,7 @@ class _SubscribeCitiesPageState extends State<SubscribeCitiesPage> {
   }
 
   Widget build(BuildContext context) {
+   
     isKeyboardVisible = MediaQuery.of(context).viewInsets.bottom != 0;
 
     return Scaffold(
@@ -197,7 +200,7 @@ class _SubscribeCitiesPageState extends State<SubscribeCitiesPage> {
                   padding: EdgeInsets.only(bottom: 20),
                   child: ListView(
                     padding: EdgeInsets.zero,
-                    children: selectedCities
+                    children: GlobalCitiesManager().selectedCities
                         .map((city) => ListTile(
                               title: Row(
                                 children: [
@@ -230,7 +233,7 @@ class _SubscribeCitiesPageState extends State<SubscribeCitiesPage> {
                                         const Color.fromRGBO(167, 73, 63, 1)),
                                 onPressed: () {
                                   setState(() {
-                                    selectedCities.remove(city);
+                                     GlobalCitiesManager().selectedCities.remove(city);
                                   });
                                 },
                               ),
@@ -243,23 +246,23 @@ class _SubscribeCitiesPageState extends State<SubscribeCitiesPage> {
                   padding: EdgeInsets.zero, 
                   itemCount: isSearching
                       ? searchResults
-                          .where((city) => !selectedCities.contains(city))
+                          .where((city) => ! GlobalCitiesManager().selectedCities.contains(city))
                           .length
                       : famousCities
-                          .where((city) => !selectedCities.contains(city))
+                          .where((city) => !GlobalCitiesManager().selectedCities.contains(city))
                           .length,
                   itemBuilder: (context, index) {
                     final city = isSearching
                         ? searchResults
-                            .where((city) => !selectedCities.contains(city))
+                            .where((city) => !GlobalCitiesManager().selectedCities.contains(city))
                             .toList()[index]
                         : famousCities
-                            .where((city) => !selectedCities.contains(city))
+                            .where((city) => !GlobalCitiesManager().selectedCities.contains(city))
                             .toList()[index];
                     return InkWell(
                       onTap: () {
                         setState(() {
-                          selectedCities.add(city);
+                          GlobalCitiesManager().selectedCities.add(city);
                         });
                       },
                       child: Container(

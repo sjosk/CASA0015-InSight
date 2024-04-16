@@ -57,9 +57,9 @@ class _MainScreenState extends State<MainScreen> {
             BottomNavigationBarItem(
                 icon: Padding(
                   padding: EdgeInsets.only(bottom: 3),
-                  child: Icon(Icons.event, size: 30),
+                  child: Icon(Icons.sort, size: 30),
                 ),
-                label: 'Calendar'),
+                label: 'Subscription'),
           ],
           currentIndex: _selectedIndex,
           selectedItemColor: Color.fromRGBO(247, 160, 90, 1),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:weatherapp/models/weather_model.dart';
 import 'package:weatherapp/services/weather_service.dart';
+import 'package:weatherapp/globalmanager/globalcities.dart';
 
 class WeatherPage extends StatefulWidget {
   const WeatherPage({super.key});
@@ -9,7 +10,11 @@ class WeatherPage extends StatefulWidget {
   State<WeatherPage> createState() => _MyWidgetState();
 }
 
+
 class _MyWidgetState extends State<WeatherPage> {
+  String currentCity;
+
+  _MyWidgetState() : currentCity = GlobalCitiesManager().selectedCities.isNotEmpty ? GlobalCitiesManager().selectedCities.first : 'No cities available';
   //api key
   final _weatherService = WeatherService('7fbf36e5c795251df28123b325f63eef');
   Weather? _weather;
@@ -64,38 +69,47 @@ class _MyWidgetState extends State<WeatherPage> {
           child: Column(
             children: <Widget>[
               Container(
-                padding: EdgeInsets.only(top: 80),
+                padding: EdgeInsets.only(top: 70, bottom: 60),
                 height: 270,
-                decoration: BoxDecoration(
-                  border: Border.all(),
-                ),
                 child: ListView(
                   scrollDirection: Axis.horizontal,
-                  children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: Text('New York'),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: Text('London'),
-                    ),
-                  ],
+                  children: GlobalCitiesManager()
+                      .selectedCities
+                      .map((city) => Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                            child: TextButton(
+                              onPressed: () {
+                                setState(() {
+                                  currentCity = city;
+                                });
+                              },
+                              child: Text(city),
+                              style: TextButton.styleFrom(
+                                backgroundColor: Colors.white,
+                                padding: EdgeInsets.all(8),
+                                textStyle: TextStyle(fontSize: 16),
+                              ),
+                            ),
+                          ))
+                      .toList(),
                 ),
               ),
               Padding(
-                padding: EdgeInsets.all(10),
-                child: Text('London',
-                    style: TextStyle(fontSize: 24, color: Colors.white)),
+                padding: EdgeInsets.only(top: 20, bottom: 0),
+                child: Text(
+                  currentCity, 
+                  style: TextStyle(fontSize: 32, color: Colors.white),
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(left:10, top: 0, bottom: 0),
+                child:Text(
+                  '${_weather?.temperature.round()}°',
+                  style: TextStyle(fontSize: 72, color: Colors.white)),
               ),
               Padding(
                 padding: EdgeInsets.all(10),
-                child: Text('15°',
-                    style: TextStyle(fontSize: 40, color: Colors.white)),
-              ),
-              Padding(
-                padding: EdgeInsets.all(10),
-                child: Text('Cloudy',
+                child: Text('${_weather?.mainCondition}',
                     style: TextStyle(fontSize: 24, color: Colors.white)),
               ),
               Padding(
