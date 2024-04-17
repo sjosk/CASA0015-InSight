@@ -40,7 +40,7 @@ class _AlarmPopState extends State<AlarmPop> {
         actions: [
           IconButton(
             icon: Icon(Icons.close),
-            onPressed: () => Navigator.pop(context), // 关闭闹钟页面的按钮
+            onPressed: () => Navigator.pop(context),
           ),
         ],
       ),
@@ -58,7 +58,7 @@ class _AlarmPopState extends State<AlarmPop> {
             ElevatedButton(
               onPressed: () {
                 Navigator.pop(context);
-                // 需要有办法调用ClockPage的resetAlarm方法，可能需要通过callback或者state management解决
+                
               },
               child: Text('Stop Alarm'),
             ),

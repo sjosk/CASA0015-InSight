@@ -14,7 +14,11 @@ class WeatherPage extends StatefulWidget {
 }
 
 class _MyWidgetState extends State<WeatherPage> {
+  final GlobalCitiesManager manager = GlobalCitiesManager();
+  List<String> cityWeathers = [];
+
   String currentCity;
+
   List<HourlyWeather> hourlyForecast = [];
 
   _MyWidgetState()
@@ -46,13 +50,28 @@ class _MyWidgetState extends State<WeatherPage> {
     _fetchForecastData();
     //fetch weather on startup
     _fetchWeather();
+
+    refreshWeathers();
   }
 
   Future<void> _fetchForecastData() async {
     String forecastData =
         await _weatherService.getForecastWeatherData(currentCity);
     _parseForecastData(forecastData);
-    print(forecastData);
+  }
+
+  Future<void> refreshWeathers() async {
+    List<String> tempWeathers = [];
+    for (String city in manager.selectedCities) {
+      final weather = await _weatherService.getWeather(city);
+      String weatherCondition = weather.mainCondition;
+      tempWeathers.add(weatherCondition);
+    }
+    setState(() {
+      cityWeathers = tempWeathers;
+    });
+    print("Current cities: ${manager.selectedCities.join(', ')}");
+    print("Current weathers: $cityWeathers");
   }
 
   void _parseForecastData(String data) {
@@ -64,10 +83,9 @@ class _MyWidgetState extends State<WeatherPage> {
     List<HourlyWeather> parsedData = [];
     for (var match in matches) {
       parsedData.add(HourlyWeather(
-        weather: match.group(2)!.trim(), // Group 2 is the weather
-        temperature:
-            double.parse(match.group(3)!), // Group 3 is the temperature
-        time: match.group(1)!.trim(), // Group 1 is the time
+        weather: match.group(2)!.trim(),
+        temperature: double.parse(match.group(3)!),
+        time: match.group(1)!.trim(),
       ));
     }
 
@@ -97,7 +115,7 @@ class _MyWidgetState extends State<WeatherPage> {
 
   @override
   Widget build(BuildContext context) {
-    String iconPath =getIconPath('${_weather?.mainCondition}');
+    
 
     int maxTempIndex = 0;
     int minTempIndex = 0;
@@ -134,49 +152,56 @@ class _MyWidgetState extends State<WeatherPage> {
             fit: BoxFit.cover,
           ),
         ),
-        
         child: SingleChildScrollView(
-          
           child: Column(
-            
             children: <Widget>[
-              
               Container(
-                
                 padding: EdgeInsets.only(top: 70, bottom: 60),
                 height: 270,
                 child: ListView(
                   scrollDirection: Axis.horizontal,
                   children: GlobalCitiesManager()
                       .selectedCities
-                      .map((city) => Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 20),
-                            child: TextButton(
-                              onPressed: () {
-                                setState(() {
-                                  currentCity = city;
-                                  _fetchWeather();
-                                  _fetchForecastData();
-                                });
-                              },
-                              
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
+                      .asMap()
+                      .entries
+                      .map((entry) {
+                    String city = entry.value;
+                    int index = entry.key;
+                    String weatherDescription = cityWeathers.length > index
+                        ? cityWeathers[index]
+                        : "Unknown"; 
+                    String iconPath =
+                        getIconPath(weatherDescription); 
+
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: TextButton(
+                        onPressed: () {
+                          setState(() {
+                            currentCity = city;
+                            _fetchWeather(); 
+                            _fetchForecastData(); 
+                          });
+                        },
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
-                                children:<Widget>[
-                              Text(city),
-                               Image.asset(iconPath, width: 40, height: 40),
-                                ],
-                              
-                            ),
-                            style: TextButton.styleFrom(
-                                backgroundColor: Colors.white,
-                                padding: EdgeInsets.all(8),
-                                textStyle: TextStyle(fontSize: 16),
-                              ),
-                            ),
-                          ))
-                      .toList(),
+                          children: <Widget>[
+                            Image.asset(iconPath,
+                                width: 60, height: 60), 
+                            Text(city,
+                             style: TextStyle(fontSize: 14, color: Colors.white),),
+                            
+                          ],
+                        ),
+                        style: TextButton.styleFrom(
+                          backgroundColor: Colors.transparent,
+                          padding: EdgeInsets.all(8),
+                          textStyle: TextStyle(fontSize: 16),
+                        ),
+                      ),
+                    );
+                  }).toList(),
                 ),
               ),
               Padding(
@@ -212,15 +237,15 @@ class _MyWidgetState extends State<WeatherPage> {
                   ],
                 ),
               ),
-               Container(
-                padding: EdgeInsets.only(top: 20, left: 40, right: 40,bottom:0),
-                alignment: Alignment.centerLeft, 
+              Container(
+                padding:
+                    EdgeInsets.only(top: 20, left: 40, right: 40, bottom: 0),
+                alignment: Alignment.centerLeft,
                 child: Text(
                   '24 hours weather forecast',
                   style: TextStyle(
                     fontSize: 12,
                     color: Colors.white,
-                   
                   ),
                 ),
               ),
@@ -266,7 +291,6 @@ class _MyWidgetState extends State<WeatherPage> {
                   ),
                 ),
               ),
-             
               Container(
                   padding: EdgeInsets.only(top: 0, left: 50, right: 50),
                   height: 60,

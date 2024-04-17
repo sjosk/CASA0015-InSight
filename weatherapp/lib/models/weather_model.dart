@@ -23,6 +23,8 @@ class Weather{
       humidity: json['main']['humidity'].toDouble(), 
     );
   }
+
+  get description => null;
 }
 
 class HourlyWeather {
@@ -31,4 +33,15 @@ class HourlyWeather {
   final String time;
 
   HourlyWeather({required this.weather, required this.temperature, required this.time});
+}
+
+class CityWeather {
+  final String weatherDescription;
+
+  CityWeather({required this.weatherDescription});
+
+  @override
+  String toString() {
+    return 'WeatherDescription: $weatherDescription';
+  }
 }

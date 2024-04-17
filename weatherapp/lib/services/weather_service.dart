@@ -15,12 +15,10 @@ class WeatherService {
   WeatherService(this.apiKey);
 
   Future<Weather> getWeather(String cityName) async {
-    print(
-        'Sending request to $BASE_URL?q=$cityName&appid=$apiKey&units=metric');
+    
     final response = await http
         .get(Uri.parse('$BASE_URL?q=$cityName&appid=$apiKey&units=metric'));
-    print('Response status: ${response.statusCode}');
-    print('Response body: ${response.body}');
+   
     if (response.statusCode == 200) {
       return Weather.fromJson(jsonDecode(response.body));
     } else {
@@ -79,9 +77,9 @@ class WeatherService {
       var timezoneOffsetSeconds = weatherJson['city']['timezone'];
       var now =
           DateTime.now().toUtc().add(Duration(seconds: timezoneOffsetSeconds));
-      print(now);
+      
       var endOfPeriod = now.add(Duration(hours: 24));
-      print(endOfPeriod);
+      
       result.writeln("cities: ${weatherJson['city']['name']}");
       var lon = weatherJson['city']['coord']['lon'];
       var lat = weatherJson['city']['coord']['lat'];

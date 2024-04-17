@@ -10,10 +10,10 @@ class ClockPage extends StatefulWidget {
 }
 
 class _AlarmClockPageState extends State<ClockPage> {
-  TimeOfDay _selectedTime = TimeOfDay(hour: 8, minute: 0); // 默认时间设置为上午8:00
+  TimeOfDay _selectedTime = TimeOfDay(hour: 8, minute: 0); 
   Timer? timer;
   bool _alarmFired = false;
-  DateTime? _lastAlarmTime; // 添加字段存储上次闹钟时间
+  DateTime? _lastAlarmTime; 
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
 
@@ -73,20 +73,20 @@ class _AlarmClockPageState extends State<ClockPage> {
       _alarmFired = false;
     });
     _saveTime(time);
-    scheduleAlarm(time);  // 调度闹钟
+    scheduleAlarm(time);  
   }
 }
 
 
   Future<void> scheduleAlarm(TimeOfDay time) async {
     var scheduledNotificationDateTime =
-        DateTime.now().add(Duration(seconds: 10)); // 示例: 设置为10秒后
+        DateTime.now().add(Duration(seconds: 10)); 
     var androidDetails = const AndroidNotificationDetails(
-    'alarm_channel_id',  // 通道ID
-    'Alarm',             // 通道名称
-    importance: Importance.max,  // 通知重要性
-    priority: Priority.high,     // 通知优先级
-    fullScreenIntent: true,      // 是否为全屏意图（例如重要通知）
+    'alarm_channel_id',  
+    'Alarm',             
+    importance: Importance.max,  
+    priority: Priority.high,     
+    fullScreenIntent: true,     
 );
 
     var iosDetails = IOSNotificationDetails();
@@ -120,7 +120,7 @@ class _AlarmClockPageState extends State<ClockPage> {
         _selectedTime = TimeOfDay(hour: hour, minute: minute);
       });
     } else {
-      // 如果没有保存的时间，使用默认时间
+     
       setState(() {
         _selectedTime = TimeOfDay(hour: 8, minute: 0);
       });
