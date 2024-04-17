@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:weatherapp/pages/alarm_pop.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class ClockPage extends StatefulWidget {
   @override
@@ -9,14 +10,23 @@ class ClockPage extends StatefulWidget {
 }
 
 class _AlarmClockPageState extends State<ClockPage> {
-  TimeOfDay _selectedTime = TimeOfDay(hour: 8, minute: 0);  // 默认时间设置为上午8:00
+  TimeOfDay _selectedTime = TimeOfDay(hour: 8, minute: 0); // 默认时间设置为上午8:00
   Timer? timer;
   bool _alarmFired = false;
   DateTime? _lastAlarmTime; // 添加字段存储上次闹钟时间
+  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
 
   @override
   void initState() {
     super.initState();
+    var initializationSettingsAndroid =
+        AndroidInitializationSettings('@mipmap/ic_launcher');
+    var initializationSettingsIOS = IOSInitializationSettings();
+    var initializationSettings = InitializationSettings(
+        android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
+    flutterLocalNotificationsPlugin.initialize(initializationSettings);
+
     _loadTime();
     timer = Timer.periodic(Duration(seconds: 1), (Timer t) => checkTime());
   }
@@ -31,12 +41,15 @@ class _AlarmClockPageState extends State<ClockPage> {
     final now = DateTime.now();
     if (TimeOfDay(hour: now.hour, minute: now.minute) == _selectedTime &&
         !_alarmFired &&
-        (_lastAlarmTime == null || now.difference(_lastAlarmTime!).inMinutes >= 1)) {
+        (_lastAlarmTime == null ||
+            now.difference(_lastAlarmTime!).inMinutes >= 1)) {
       setState(() {
         _alarmFired = true;
         _lastAlarmTime = now;
       });
-      Navigator.of(context).push(MaterialPageRoute(builder: (context) => AlarmPop())).then((_) {
+      Navigator.of(context)
+          .push(MaterialPageRoute(builder: (context) => AlarmPop()))
+          .then((_) {
         _resetAlarm();
       });
     }
@@ -49,19 +62,47 @@ class _AlarmClockPageState extends State<ClockPage> {
   }
 
   void _pickTime() async {
-    TimeOfDay? time = await showTimePicker(
-      context: context,
-      initialTime: _selectedTime,
-    );
+  TimeOfDay? time = await showTimePicker(
+    context: context,
+    initialTime: _selectedTime,
+  );
 
-    if (time != null && time != _selectedTime) {
-      setState(() {
-        _selectedTime = time;
-        _alarmFired = false;
-      });
-      _saveTime(time);
-    }
+  if (time != null && time != _selectedTime) {
+    setState(() {
+      _selectedTime = time;
+      _alarmFired = false;
+    });
+    _saveTime(time);
+    scheduleAlarm(time);  // 调度闹钟
   }
+}
+
+
+  Future<void> scheduleAlarm(TimeOfDay time) async {
+    var scheduledNotificationDateTime =
+        DateTime.now().add(Duration(seconds: 10)); // 示例: 设置为10秒后
+    var androidDetails = const AndroidNotificationDetails(
+    'alarm_channel_id',  // 通道ID
+    'Alarm',             // 通道名称
+    importance: Importance.max,  // 通知重要性
+    priority: Priority.high,     // 通知优先级
+    fullScreenIntent: true,      // 是否为全屏意图（例如重要通知）
+);
+
+    var iosDetails = IOSNotificationDetails();
+    var generalDetails =
+        NotificationDetails(android: androidDetails, iOS: iosDetails);
+
+    await flutterLocalNotificationsPlugin.schedule(
+      0,
+      'Time to Wake Up!',
+      'Your alarm is ringing!',
+      scheduledNotificationDateTime,
+      generalDetails,
+      androidAllowWhileIdle: true,
+    );
+  }
+  
 
   Future<void> _saveTime(TimeOfDay time) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -102,12 +143,12 @@ class _AlarmClockPageState extends State<ClockPage> {
           children: <Widget>[
             Padding(
               padding: EdgeInsets.only(left: 33.0, top: 88.0),
-              child: Text("Set Morning Clock",
+              child: Text(
+                "Set Morning Clock",
                 style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: const Color.fromRGBO(35, 35, 35, 1)
-                ),
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: const Color.fromRGBO(35, 35, 35, 1)),
               ),
             ),
             Expanded(
@@ -115,7 +156,8 @@ class _AlarmClockPageState extends State<ClockPage> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
-                    Text('Alarm Time: ${_selectedTime.format(context)}',
+                    Text(
+                      'Alarm Time: ${_selectedTime.format(context)}',
                       style: TextStyle(fontSize: 24, color: Colors.white),
                     ),
                     SizedBox(height: 24),
