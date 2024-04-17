@@ -114,6 +114,7 @@ class _IndoorNavigationPageState extends State<IndoorNavigationPage> {
   List<String> locations = ['Main entrance', 'Room 107', 'Cafe', 'Library', 'Toilet']; 
   String? from;
   String? to;
+  String currentFloor = "Loading..."; // Default value before beacon is detected
 
   @override
   void initState() {
@@ -132,6 +133,7 @@ class _IndoorNavigationPageState extends State<IndoorNavigationPage> {
           beacons.clear();
           beacons.addAll(result.beacons);
           beacons.sort((a, b) => a.rssi.compareTo(b.rssi));
+          currentFloor = "Floor ${beacons.first.major}";
           speak("Closest beacon at ${beacons.first.proximityUUID}, major: ${beacons.first.major}, minor: ${beacons.first.minor}");
         });
       }
@@ -178,7 +180,7 @@ class _IndoorNavigationPageState extends State<IndoorNavigationPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Text('Current Floor: ${from ?? "Not set"}', style: TextStyle(fontSize: 20)),
+            Text('Current Floor: $currentFloor', style: TextStyle(fontSize: 20)),
             SizedBox(height: 20),
             buildDropdownWithMic('From', from, 'from'),
             SizedBox(height: 20),
