@@ -36,6 +36,7 @@ class _MyWidgetState extends State<WeatherPage> {
       final weather = await _weatherService.getWeather(currentCity);
       setState(() {
         _weather = weather;
+        
       });
     } catch (e) {
       print('Failed to fetch current weather: $e');
@@ -113,14 +114,35 @@ class _MyWidgetState extends State<WeatherPage> {
     }
   }
 
+  String getIconPathselect(String weatherDescription) {
+    switch (weatherDescription) {
+      case 'Clear':
+        return 'assets/icons/clearselected.png';
+      case 'Clouds':
+        return 'assets/icons/cloudsselect.png';
+      case 'Rain':
+        return 'assets/icons/rainselect.png';
+      case 'Snow':
+        return 'assets/icons/snowselect.png';
+      default:
+        return 'assets/icons/cloudsselect.png';
+    }
+  }
+
+  bool containsRainOrSnow() {
+    
+    return cityWeathers
+        .any((weather) => weather.contains("Rain") || weather.contains("Snow")|| weather.contains("Drizzle")|| weather.contains("Thunderstorm ")|| weather.contains("Mist")|| weather.contains("Smoke"));
+  }
+
   @override
   Widget build(BuildContext context) {
-    
-
     int maxTempIndex = 0;
     int minTempIndex = 0;
     double maxTemp = double.negativeInfinity;
     double minTemp = double.infinity;
+    bool isRainOrSnow = containsRainOrSnow();
+
 
     for (int i = 0; i < hourlyForecast.length; i++) {
       double temp = hourlyForecast[i].temperature;
@@ -147,11 +169,13 @@ class _MyWidgetState extends State<WeatherPage> {
         width: screenWidth,
         height: screenHeight,
         decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('assets/images/Backgroundrain.png'),
-            fit: BoxFit.cover,
+        image: DecorationImage(
+          image: AssetImage(
+            isRainOrSnow ? 'assets/images/Backgroundrain.png' : 'assets/images/Backgroundlight.png'
           ),
+          fit: BoxFit.cover,
         ),
+      ),
         child: SingleChildScrollView(
           child: Column(
             children: <Widget>[
@@ -169,9 +193,15 @@ class _MyWidgetState extends State<WeatherPage> {
                     int index = entry.key;
                     String weatherDescription = cityWeathers.length > index
                         ? cityWeathers[index]
-                        : "Unknown"; 
-                    String iconPath =
-                        getIconPath(weatherDescription); 
+                        : "Unknown";
+
+                    String iconPath = currentCity == city
+                        ? getIconPathselect(weatherDescription)
+                        : getIconPath(weatherDescription);
+
+                    Random random = Random();
+
+                    double alignValue = random.nextDouble();
 
                     return Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -179,25 +209,37 @@ class _MyWidgetState extends State<WeatherPage> {
                         onPressed: () {
                           setState(() {
                             currentCity = city;
-                            _fetchWeather(); 
-                            _fetchForecastData(); 
+                            _fetchWeather();
+                            _fetchForecastData();
                           });
                         },
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: <Widget>[
-                            Image.asset(iconPath,
-                                width: 60, height: 60), 
-                            Text(city,
-                             style: TextStyle(fontSize: 14, color: Colors.white),),
-                            
-                          ],
+                        child: Align(
+                          alignment: Alignment(0, alignValue * 2 - 1),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              Image.asset(iconPath, width: 70, height: 70),
+                              Text(
+                                city,
+                                style: TextStyle(
+                                    fontSize: 14,
+                                    color: Color.fromRGBO(1, 44, 65, 1)),
+                              ),
+                            ],
+                          ),
                         ),
-                        style: TextButton.styleFrom(
-                          backgroundColor: Colors.transparent,
-                          padding: EdgeInsets.all(8),
-                          textStyle: TextStyle(fontSize: 16),
+                        style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStateProperty.resolveWith<Color>(
+                                  (Set<MaterialState> states) =>
+                                      Colors.transparent),
+                          overlayColor:
+                              MaterialStateProperty.resolveWith<Color>(
+                                  (Set<MaterialState> states) =>
+                                      Colors.transparent),
+                          padding: MaterialStateProperty.all(EdgeInsets.all(8)),
+                          textStyle: MaterialStateProperty.all(
+                              TextStyle(fontSize: 16)),
                         ),
                       ),
                     );
@@ -327,7 +369,7 @@ class _MyWidgetState extends State<WeatherPage> {
                             return '';
                           },
                           getTextStyles: (context, value) => const TextStyle(
-                            color: Colors.red,
+                            color: Color.fromARGB(255, 255, 255, 255),
                             fontWeight: FontWeight.bold,
                             fontSize: 12,
                           ),
@@ -342,7 +384,7 @@ class _MyWidgetState extends State<WeatherPage> {
                             return '';
                           },
                           getTextStyles: (context, value) => const TextStyle(
-                            color: Colors.red,
+                            color: Color.fromARGB(255, 255, 255, 255),
                             fontWeight: FontWeight.bold,
                             fontSize: 12,
                           ),
@@ -361,7 +403,7 @@ class _MyWidgetState extends State<WeatherPage> {
                         LineChartBarData(
                           spots: spots,
                           isCurved: true,
-                          colors: [Colors.blue],
+                          colors: [const Color.fromRGBO(249, 234, 213, 1)],
                           barWidth: 2,
                           isStrokeCapRound: true,
                           dotData: FlDotData(
@@ -370,10 +412,10 @@ class _MyWidgetState extends State<WeatherPage> {
                                 if (index == maxTempIndex ||
                                     index == minTempIndex) {
                                   return FlDotCirclePainter(
-                                    radius: 4,
-                                    color: Colors.red,
-                                    strokeWidth: 2,
-                                    strokeColor: Colors.white,
+                                    radius: 5,
+                                    color: Color.fromRGBO(156, 75, 73, 1),
+                                    strokeWidth: 0,
+                                    strokeColor: Color.fromRGBO(249, 234, 213, 1),
                                   );
                                 } else {
                                   return FlDotCirclePainter(

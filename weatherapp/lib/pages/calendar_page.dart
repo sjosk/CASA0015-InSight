@@ -185,7 +185,7 @@ class _SubscribeCitiesPageState extends State<CalendarPage> {
                     ),
                     onChanged: startSearch,
                     controller:
-                        _controller, // Add the TextEditingController Controller
+                        _controller, 
                   )),
               if (!isKeyboardVisible)
                 Padding(
