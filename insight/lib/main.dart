@@ -82,17 +82,13 @@ class HomePage extends StatelessWidget {
             context,
             icon: Icon(Icons.elevator_rounded),
             text: 'Floor Transition',
-            onTap: () {
-              // Implement your floor transition logic or call to another page here
-            },
+            onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => FloorTransitionPage())),
           ),
           _buildClickableArea(
             context,
             icon: Icon(Icons.directions_walk),
             text: 'Emergency',
-            onTap: () {
-              // Implement your emergency handling or navigation logic here
-            },
+            onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => EmergencyPage())),
           ),
         ],
       ),
@@ -100,18 +96,20 @@ class HomePage extends StatelessWidget {
   }
 }
 
+
+
+//Indoor Navigation Page
 class IndoorNavigationPage extends StatefulWidget {
   @override
   _IndoorNavigationPageState createState() => _IndoorNavigationPageState();
 }
-
 class _IndoorNavigationPageState extends State<IndoorNavigationPage> {
   final FlutterTts flutterTts = FlutterTts();
   final List<Beacon> beacons = [];
   final stt.SpeechToText _speech = stt.SpeechToText();
   bool _isListening = false;
   String _currentField = '';
-  List<String> locations = ['Main entrance', 'Room 107', 'Cafe', 'Library', 'Toilet']; 
+  List<String> locations = ['Main entrance', 'CE Lab', 'Cafe', '1F Toilet', '2F Toilet']; 
   String? from;
   String? to;
   String currentFloor = "Loading..."; // Default value before beacon is detected
@@ -190,13 +188,37 @@ class _IndoorNavigationPageState extends State<IndoorNavigationPage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 ElevatedButton(
-                  onPressed: () {
+                  onPressed: (){
+                  if (from == null || to == null || from!.isEmpty || to!.isEmpty) {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: Text("Incomplete Selection"),
+                          content: Text("Please select both a 'From' and 'To' location."),
+                          actions: <Widget>[
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop(); // Dismiss the alert dialog
+                              },
+                              child: Text('OK'),
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  } else {
                     String temp = from ?? '';
                     from = to;
                     to = temp;
                     setState(() {});
+                  }
                   },
-                  child: Text('Exchange From and To'),
+                  style: ElevatedButton.styleFrom(
+                  primary: Theme.of(context).primaryColor, // Set the button color to match your theme
+                  onPrimary: Colors.white, // Text/icon color on the button
+                  ),
+                  child: Icon(Icons.swap_horiz, size: 30),
                 ),
                 ElevatedButton(
                   onPressed: () {
@@ -207,7 +229,11 @@ class _IndoorNavigationPageState extends State<IndoorNavigationPage> {
                       speak("Please select both a starting and ending location, and ensure you are within range of beacons.");
                     }
                   },
-                  child: Text('Start'),
+                  style: ElevatedButton.styleFrom(
+                  primary: Theme.of(context).primaryColor, // Set the button color to match your theme
+                  onPrimary: Colors.white, // Text/icon color on the button
+                  ),
+                  child: Icon(Icons.search, size: 30),
                 ),
               ],
             ),
@@ -249,6 +275,32 @@ class _IndoorNavigationPageState extends State<IndoorNavigationPage> {
           onPressed: () => _listen(field),
         ),
       ],
+    );
+  }
+}
+
+//Floor Transition Page
+class FloorTransitionPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Floor Transition')),
+      body: Center(
+        child: Text('Floor Transition Page'),
+      ),
+    );
+  }
+}
+
+//Emergency Page
+class EmergencyPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Emergency')),
+      body: Center(
+        child: Text('Emergency Page'),
+      ),
     );
   }
 }
