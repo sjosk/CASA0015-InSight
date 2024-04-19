@@ -4,6 +4,7 @@ import 'package:flutter_tts/flutter_tts.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 import 'package:vibration/vibration.dart';
 
+
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
@@ -82,7 +83,7 @@ class HomePage extends StatelessWidget {
             context,
             icon: Icon(Icons.elevator_rounded),
             text: 'Floor Transition',
-            onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => FloorTransitionPage())),
+            onTap: () => Navigator.push(context,MaterialPageRoute(builder: (context) => FloorTransitionPage(currentFloor: currentFloor))),
           ),
           _buildClickableArea(
             context,
@@ -122,21 +123,30 @@ class _IndoorNavigationPageState extends State<IndoorNavigationPage> {
     flutterTts.setSpeechRate(0.5);
   }
 
+
+
   void initBeaconScanning() async {
-    await flutterBeacon.initializeScanning;
-    final regions = [Region(identifier: 'myBeacon', proximityUUID: 'your-beacon-uuid')];
+  try {
+    await flutterBeacon.initializeScanning; 
+    final regions = [Region(identifier: 'all')]; // Scanning all beacons
     flutterBeacon.ranging(regions).listen((RangingResult result) {
       if (result.beacons.isNotEmpty) {
         setState(() {
           beacons.clear();
           beacons.addAll(result.beacons);
-          beacons.sort((a, b) => a.rssi.compareTo(b.rssi));
-          currentFloor = "Floor ${beacons.first.major}";
+          beacons.sort((a, b) => a.rssi.compareTo(b.rssi)); // Sorting by signal strength
+          currentFloor = "Floor ${beacons.first.major}"; // Updating the floor number
           speak("Closest beacon at ${beacons.first.proximityUUID}, major: ${beacons.first.major}, minor: ${beacons.first.minor}");
         });
+      } else {
+        print('No beacons detected');
       }
     });
+  } catch (e) {
+    print('Error initializing beacon scanning: $e');
   }
+}
+
 
   Future<void> speak(String text) async {
     await flutterTts.speak(text);
@@ -215,23 +225,23 @@ class _IndoorNavigationPageState extends State<IndoorNavigationPage> {
                   }
                   },
                   style: ElevatedButton.styleFrom(
-                  primary: Theme.of(context).primaryColor, // Set the button color to match your theme
-                  onPrimary: Colors.white, // Text/icon color on the button
+                  primary: Theme.of(context).primaryColor, 
+                  onPrimary: Colors.white, 
                   ),
                   child: Icon(Icons.swap_horiz, size: 30),
                 ),
                 ElevatedButton(
                   onPressed: () {
                     if (beacons.isNotEmpty && from != null && to != null) {
-                      speak("Navigating from $from to $to using beacon with UUID: ${beacons.first.proximityUUID}");
+                      speak("Navigating from $from to $to");
                       vibratePhone();
                     } else {
-                      speak("Please select both a starting and ending location, and ensure you are within range of beacons.");
+                      speak("Please select both a starting and ending location");
                     }
                   },
                   style: ElevatedButton.styleFrom(
-                  primary: Theme.of(context).primaryColor, // Set the button color to match your theme
-                  onPrimary: Colors.white, // Text/icon color on the button
+                  primary: Theme.of(context).primaryColor, 
+                  onPrimary: Colors.white, 
                   ),
                   child: Icon(Icons.search, size: 30),
                 ),
@@ -242,6 +252,8 @@ class _IndoorNavigationPageState extends State<IndoorNavigationPage> {
       ),
     );
   }
+  
+  
 
   Widget buildDropdownWithMic(String label, String? value, String field) {
     return Row(
@@ -281,16 +293,74 @@ class _IndoorNavigationPageState extends State<IndoorNavigationPage> {
 
 //Floor Transition Page
 class FloorTransitionPage extends StatelessWidget {
+  final String currentFloor; // Current floor passed into the constructor
+
+  FloorTransitionPage({Key? key, required this.currentFloor}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Floor Transition')),
+      appBar: AppBar(
+        title: Text('Floor Transition'),
+      ),
       body: Center(
-        child: Text('Floor Transition Page'),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text('Current Floor: $currentFloor', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () => _navigateToStairs(context),
+              child: Text('Stairs'),
+            ),
+            SizedBox(height: 10),
+            ElevatedButton(
+              onPressed: () => _navigateToElevator(context),
+              child: Text('Elevator'),
+            ),
+          ],
+        ),
       ),
     );
   }
+
+  void _navigateToStairs(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Navigate with Stairs'),
+          content: Text('Proceed to the nearest staircase to reach your destination.'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _navigateToElevator(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Navigate with Elevator'),
+          content: Text('Proceed to the nearest elevator to reach your destination.'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+  }
 }
+
 
 //Emergency Page
 class EmergencyPage extends StatelessWidget {
