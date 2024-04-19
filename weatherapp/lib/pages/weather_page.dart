@@ -6,6 +6,9 @@ import 'package:weatherapp/models/weather_model.dart';
 import 'package:weatherapp/services/weather_service.dart';
 import 'package:weatherapp/globalmanager/globalcities.dart';
 
+import 'package:weatherapp/globalmanager/mqtt_manager.dart';
+import 'package:mqtt_client/mqtt_client.dart';
+
 class WeatherPage extends StatefulWidget {
   const WeatherPage({super.key, required String forecastDetails});
 
@@ -16,9 +19,11 @@ class WeatherPage extends StatefulWidget {
 class _MyWidgetState extends State<WeatherPage> {
   final GlobalCitiesManager manager = GlobalCitiesManager();
   List<String> cityWeathers = [];
-
+  late MQTTManager _mqttManager;
+  String latestMessage = "";
   String currentCity;
-
+  late String MQTT;
+  bool hasAlertBeenShown = false;
   List<HourlyWeather> hourlyForecast = [];
 
   _MyWidgetState()
@@ -36,7 +41,6 @@ class _MyWidgetState extends State<WeatherPage> {
       final weather = await _weatherService.getWeather(currentCity);
       setState(() {
         _weather = weather;
-        
       });
     } catch (e) {
       print('Failed to fetch current weather: $e');
@@ -51,8 +55,37 @@ class _MyWidgetState extends State<WeatherPage> {
     _fetchForecastData();
     //fetch weather on startup
     _fetchWeather();
-
+    _setupMQTT();
     refreshWeathers();
+  }
+
+  void _setupMQTT() {
+    _mqttManager = MQTTManager();
+    _mqttManager.initializeMQTTClient();
+
+    _mqttManager.client.onConnected = () {
+      _mqttManager.client.subscribe(
+          "student/CASA0014/plant/ucjtdjw/moisture", MqttQos.atLeastOnce);
+    };
+
+    _mqttManager.client.updates!
+        .listen((List<MqttReceivedMessage<MqttMessage>> c) {
+      if (c.isNotEmpty) {
+        final MqttPublishMessage message = c[0].payload as MqttPublishMessage;
+        final payload =
+            MqttPublishPayload.bytesToStringAsString(message.payload.message);
+        if (c[0].topic == "student/CASA0014/plant/ucjtdjw/moisture") {
+          latestMessage = payload;
+          print('Received detect condition: $latestMessage');
+        }
+        if (latestMessage == "1" &&
+            !hasAlertBeenShown &&
+            containsRainOrSnow()) {
+          _showRainOrSnowAlert();
+          hasAlertBeenShown = true;
+        }
+      }
+    });
   }
 
   Future<void> _fetchForecastData() async {
@@ -130,9 +163,35 @@ class _MyWidgetState extends State<WeatherPage> {
   }
 
   bool containsRainOrSnow() {
-    
-    return cityWeathers
-        .any((weather) => weather.contains("Rain") || weather.contains("Snow")|| weather.contains("Drizzle")|| weather.contains("Thunderstorm ")|| weather.contains("Mist")|| weather.contains("Smoke"));
+    return cityWeathers.any((weather) =>
+        weather.contains("Rain") ||
+        weather.contains("Snow") ||
+        weather.contains("Drizzle") ||
+        weather.contains("Thunderstorm ") ||
+        weather.contains("Mist") ||
+        weather.contains("Smoke") ||
+        weather.contains("Haze"));
+  }
+
+  void _showRainOrSnowAlert() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Reminder"),
+          content: Text(
+              "Weather forecast for rain or snow, please remember to bring an umbrella!"),
+          actions: <Widget>[
+            TextButton(
+              child: Text("OK"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -142,7 +201,6 @@ class _MyWidgetState extends State<WeatherPage> {
     double maxTemp = double.negativeInfinity;
     double minTemp = double.infinity;
     bool isRainOrSnow = containsRainOrSnow();
-
 
     for (int i = 0; i < hourlyForecast.length; i++) {
       double temp = hourlyForecast[i].temperature;
@@ -169,13 +227,13 @@ class _MyWidgetState extends State<WeatherPage> {
         width: screenWidth,
         height: screenHeight,
         decoration: BoxDecoration(
-        image: DecorationImage(
-          image: AssetImage(
-            isRainOrSnow ? 'assets/images/Backgroundrain.png' : 'assets/images/Backgroundlight.png'
+          image: DecorationImage(
+            image: AssetImage(isRainOrSnow
+                ? 'assets/images/Backgroundrain.png'
+                : 'assets/images/Backgroundlight.png'),
+            fit: BoxFit.cover,
           ),
-          fit: BoxFit.cover,
         ),
-      ),
         child: SingleChildScrollView(
           child: Column(
             children: <Widget>[
@@ -415,7 +473,8 @@ class _MyWidgetState extends State<WeatherPage> {
                                     radius: 5,
                                     color: Color.fromRGBO(156, 75, 73, 1),
                                     strokeWidth: 0,
-                                    strokeColor: Color.fromRGBO(249, 234, 213, 1),
+                                    strokeColor:
+                                        Color.fromRGBO(249, 234, 213, 1),
                                   );
                                 } else {
                                   return FlDotCirclePainter(

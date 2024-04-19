@@ -10,10 +10,11 @@ class ClockPage extends StatefulWidget {
 }
 
 class _AlarmClockPageState extends State<ClockPage> {
-  TimeOfDay _selectedTime = TimeOfDay(hour: 8, minute: 0); 
+  TimeOfDay _selectedTime = TimeOfDay(hour: 8, minute: 0);
   Timer? timer;
   bool _alarmFired = false;
-  DateTime? _lastAlarmTime; 
+  bool _isAlarmEnabled = true;  // 新增闹钟启用状态
+  DateTime? _lastAlarmTime;
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
 
@@ -41,6 +42,7 @@ class _AlarmClockPageState extends State<ClockPage> {
     final now = DateTime.now();
     if (TimeOfDay(hour: now.hour, minute: now.minute) == _selectedTime &&
         !_alarmFired &&
+        _isAlarmEnabled &&  // Check if alarm is enabled
         (_lastAlarmTime == null ||
             now.difference(_lastAlarmTime!).inMinutes >= 1)) {
       setState(() {
@@ -62,21 +64,22 @@ class _AlarmClockPageState extends State<ClockPage> {
   }
 
   void _pickTime() async {
-  TimeOfDay? time = await showTimePicker(
-    context: context,
-    initialTime: _selectedTime,
-  );
+    TimeOfDay? time = await showTimePicker(
+      context: context,
+      initialTime: _selectedTime,
+    );
 
-  if (time != null && time != _selectedTime) {
-    setState(() {
-      _selectedTime = time;
-      _alarmFired = false;
-    });
-    _saveTime(time);
-    scheduleAlarm(time);  
+    if (time != null && time != _selectedTime) {
+      setState(() {
+        _selectedTime = time;
+        _alarmFired = false;
+      });
+      _saveTime(time);
+      if (_isAlarmEnabled) {
+        scheduleAlarm(time);  // Only schedule if alarm is enabled
+      }
+    }
   }
-}
-
 
   Future<void> scheduleAlarm(TimeOfDay time) async {
     var scheduledNotificationDateTime =
@@ -102,7 +105,6 @@ class _AlarmClockPageState extends State<ClockPage> {
       androidAllowWhileIdle: true,
     );
   }
-  
 
   Future<void> _saveTime(TimeOfDay time) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -156,14 +158,32 @@ class _AlarmClockPageState extends State<ClockPage> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
+                    
                     Text(
                       'Alarm Time: ${_selectedTime.format(context)}',
-                      style: TextStyle(fontSize: 24, color: Colors.white),
+                      style: TextStyle(fontSize: 24, color: Color.fromRGBO(35, 35, 35,1)),
                     ),
                     SizedBox(height: 24),
                     ElevatedButton(
                       onPressed: _pickTime,
                       child: Text('Pick Time'),
+                    ),
+                    SizedBox(height:60),
+                    ElevatedButton(
+                      onPressed: () {
+                        setState(() {
+                          _isAlarmEnabled = !_isAlarmEnabled;  
+                        });
+                        if (_isAlarmEnabled) {
+                          scheduleAlarm(_selectedTime);  
+                        } else {
+                          flutterLocalNotificationsPlugin.cancelAll();  
+                        }
+                      },
+                      child: Text(_isAlarmEnabled ? 'Disable Alarm' : 'Enable Alarm'),
+                      style: ElevatedButton.styleFrom(
+                        primary: _isAlarmEnabled ? const Color.fromARGB(255, 255, 255, 255) : Color.fromRGBO(202, 202, 202, 1)  
+                      ),
                     ),
                   ],
                 ),

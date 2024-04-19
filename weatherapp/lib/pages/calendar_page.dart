@@ -3,7 +3,7 @@ import 'package:weatherapp/services/weather_service.dart';
 import 'package:weatherapp/services/cityname_service.dart';
 
 import 'package:weatherapp/globalmanager/globalcities.dart';
-
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 
 
 class CalendarPage extends StatefulWidget {
@@ -14,7 +14,9 @@ class CalendarPage extends StatefulWidget {
 
 class _SubscribeCitiesPageState extends State<CalendarPage> {
   TextEditingController _controller = TextEditingController();
-  bool isKeyboardVisible = false;
+   bool isKeyboardVisible = false;
+  late KeyboardVisibilityController _keyboardVisibilityController;
+
 
   @override
   void dispose() {
@@ -44,6 +46,12 @@ class _SubscribeCitiesPageState extends State<CalendarPage> {
     cityService =
         CityService('9eda19280bmsh39cab15c5637f74p102d5cjsnc784311a0d1d');
     getCurrentCityName();
+     _keyboardVisibilityController = KeyboardVisibilityController();
+     _keyboardVisibilityController.onChange.listen((bool visible) {
+      setState(() {
+        isKeyboardVisible = visible;
+      });
+    });
   }
 
   void getCurrentCityName() async {
@@ -131,8 +139,7 @@ class _SubscribeCitiesPageState extends State<CalendarPage> {
 
   Widget build(BuildContext context) {
    
-    isKeyboardVisible = MediaQuery.of(context).viewInsets.bottom != 0;
-
+print("Keyboard visibility: $isKeyboardVisible");
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(
@@ -198,7 +205,7 @@ class _SubscribeCitiesPageState extends State<CalendarPage> {
                 ),
               if (!isKeyboardVisible)
                 Container(
-                  height: 210,
+                  height: 300,
                   padding: EdgeInsets.only(bottom: 20),
                   child: ListView(
                     padding: EdgeInsets.zero,

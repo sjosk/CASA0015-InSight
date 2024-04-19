@@ -34,6 +34,7 @@ dependencies:
   shared_preferences: ^2.0.13
   flutter_local_notifications: ^9.1.4
   flutter_background_service: ^0.1.2
+  audioplayers: ^0.20.1
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -46,7 +47,12 @@ dependencies:
   geocoding: ^3.0.0
   lottie: ^3.1.0
   permission_handler: ^8.0.0  
-  
+  flutter_keyboard_visibility: ^6.0.0
+  mqtt_client: ^10.0.0
+  firebase_core: ^2.27.0
+  firebase_messaging: ^14.7.19
+  provider: ^6.1.2
+
 
 dev_dependencies:
   flutter_test:
@@ -73,6 +79,8 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
       - assets/Rain.json
+      - assets/Clouds.json
+      - assets/Clear.json
       - assets/images/enterBackground.png
       - assets/images/logo.png
       - assets/images/subscribeBack.png
@@ -86,6 +94,7 @@ flutter:
       - assets/icons/rainselect.png
       - assets/icons/snow.png
       - assets/icons/snowselect.png
+      
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
