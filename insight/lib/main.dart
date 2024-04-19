@@ -83,7 +83,7 @@ class HomePage extends StatelessWidget {
             context,
             icon: Icon(Icons.elevator_rounded),
             text: 'Floor Transition',
-            onTap: () => Navigator.push(context,MaterialPageRoute(builder: (context) => FloorTransitionPage(currentFloor: currentFloor))),
+            onTap: () => Navigator.push(context,MaterialPageRoute(builder: (context) => FloorTransitionPage())),
           ),
           _buildClickableArea(
             context,
@@ -292,10 +292,44 @@ class _IndoorNavigationPageState extends State<IndoorNavigationPage> {
 }
 
 //Floor Transition Page
-class FloorTransitionPage extends StatelessWidget {
-  final String currentFloor; // Current floor passed into the constructor
+class FloorTransitionPage extends StatefulWidget {
+  @override
+  _FloorTransitionPageState createState() => _FloorTransitionPageState();
+}
 
-  FloorTransitionPage({Key? key, required this.currentFloor}) : super(key: key);
+class _FloorTransitionPageState extends State<FloorTransitionPage> {
+  String currentFloor = "Scanning...";
+  final beaconStream = flutterBeacon.ranging(<Region>[
+    Region(identifier: 'all'),
+  ]);
+
+  @override
+  void initState() {
+    super.initState();
+    initBeaconScanning();
+  }
+
+  void initBeaconScanning() async {
+    await flutterBeacon.initializeAndCheckScanning;
+
+    // Listen to beacon ranging stream
+    beaconStream.listen((RangingResult result) {
+      if (result.beacons.isNotEmpty) {
+        // Sort beacons based on RSSI to get the closest one
+        result.beacons.sort((a, b) => a.rssi.compareTo(b.rssi));
+        Beacon closestBeacon = result.beacons.first;
+
+        setState(() {
+          currentFloor = "Floor ${closestBeacon.major}";
+        });
+      }
+    }, onError: (error) {
+      setState(() {
+        currentFloor = "Error in scanning";
+      });
+      print("Error in beacon scanning: $error");
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -310,12 +344,12 @@ class FloorTransitionPage extends StatelessWidget {
             Text('Current Floor: $currentFloor', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
             SizedBox(height: 20),
             ElevatedButton(
-              onPressed: () => _navigateToStairs(context),
+              onPressed: () => navigateToStairs(context),
               child: Text('Stairs'),
             ),
             SizedBox(height: 10),
             ElevatedButton(
-              onPressed: () => _navigateToElevator(context),
+              onPressed: () => navigateToElevator(context),
               child: Text('Elevator'),
             ),
           ],
@@ -324,42 +358,15 @@ class FloorTransitionPage extends StatelessWidget {
     );
   }
 
-  void _navigateToStairs(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Navigate with Stairs'),
-          content: Text('Proceed to the nearest staircase to reach your destination.'),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: Text('OK'),
-            ),
-          ],
-        );
-      },
-    );
+  void navigateToStairs(BuildContext context) {
+    // Define navigation or action for stairs
   }
 
-  void _navigateToElevator(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Navigate with Elevator'),
-          content: Text('Proceed to the nearest elevator to reach your destination.'),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: Text('OK'),
-            ),
-          ],
-        );
-      },
-    );
+  void navigateToElevator(BuildContext context) {
+    // Define navigation or action for elevator
   }
 }
+
 
 
 //Emergency Page
