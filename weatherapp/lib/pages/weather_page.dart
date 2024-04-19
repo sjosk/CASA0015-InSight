@@ -1,3 +1,4 @@
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'dart:math';
 
@@ -57,6 +58,27 @@ class _MyWidgetState extends State<WeatherPage> {
     _fetchWeather();
     _setupMQTT();
     refreshWeathers();
+    AwesomeNotifications().initialize(
+        null,
+        [
+          NotificationChannel(
+              channelKey: 'basic_channel',
+              channelName: 'Weather Notifications',
+              channelDescription: 'Notification channel for weather alerts',
+              defaultColor: Color(0xFF9D50DD),
+              ledColor: Colors.white)
+        ],
+        debug: true);
+  }
+
+  void createWeatherNotification(String title, String body) {
+    AwesomeNotifications().createNotification(
+        content: NotificationContent(
+      id: 10,
+      channelKey: 'basic_channel',
+      title: title,
+      body: body,
+    ));
   }
 
   void _setupMQTT() {
@@ -192,6 +214,8 @@ class _MyWidgetState extends State<WeatherPage> {
         );
       },
     );
+    createWeatherNotification("Weather Alert",
+        "Weather forecast for rain or snow, please remember to bring an umbrella!");
   }
 
   @override
