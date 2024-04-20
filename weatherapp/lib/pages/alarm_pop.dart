@@ -104,9 +104,10 @@ class _AlarmPopState extends State<AlarmPop> {
               },
               child: Text('Stop Alarm'),
               style: ElevatedButton.styleFrom(
-                primary: const Color.fromRGBO(249, 234, 213, 1),
-                onPrimary: const Color.fromRGBO(35, 35, 35, 1),
-                minimumSize: Size(150, 50),
+                backgroundColor:
+                    const Color.fromRGBO(249, 234, 213, 1), 
+                foregroundColor: const Color.fromRGBO(35, 35, 35, 1), 
+                minimumSize: const Size(150, 50), 
               ),
             ),
           ],
