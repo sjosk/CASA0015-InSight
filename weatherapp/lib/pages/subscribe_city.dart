@@ -9,7 +9,6 @@ class SubscribeCitiesPage extends StatefulWidget {
   _SubscribeCitiesPageState createState() => _SubscribeCitiesPageState();
 }
 
-
 class _SubscribeCitiesPageState extends State<SubscribeCitiesPage> {
   TextEditingController _controller = TextEditingController();
   bool isKeyboardVisible = false;
@@ -28,7 +27,7 @@ class _SubscribeCitiesPageState extends State<SubscribeCitiesPage> {
     'Sydney',
     'Beijing',
   ];
- 
+
   List<String> searchResults = [];
   bool isSearching = false;
   String currentCity = "Getting current location...";
@@ -128,7 +127,6 @@ class _SubscribeCitiesPageState extends State<SubscribeCitiesPage> {
   }
 
   Widget build(BuildContext context) {
-   
     isKeyboardVisible = MediaQuery.of(context).viewInsets.bottom != 0;
 
     return Scaffold(
@@ -200,7 +198,8 @@ class _SubscribeCitiesPageState extends State<SubscribeCitiesPage> {
                   padding: EdgeInsets.only(bottom: 20),
                   child: ListView(
                     padding: EdgeInsets.zero,
-                    children: GlobalCitiesManager().selectedCities
+                    children: GlobalCitiesManager()
+                        .selectedCities
                         .map((city) => ListTile(
                               title: Row(
                                 children: [
@@ -233,7 +232,9 @@ class _SubscribeCitiesPageState extends State<SubscribeCitiesPage> {
                                         const Color.fromRGBO(167, 73, 63, 1)),
                                 onPressed: () {
                                   setState(() {
-                                     GlobalCitiesManager().selectedCities.remove(city);
+                                    GlobalCitiesManager()
+                                        .selectedCities
+                                        .remove(city);
                                   });
                                 },
                               ),
@@ -243,21 +244,29 @@ class _SubscribeCitiesPageState extends State<SubscribeCitiesPage> {
                 ),
               Expanded(
                 child: ListView.builder(
-                  padding: EdgeInsets.zero, 
+                  padding: EdgeInsets.zero,
                   itemCount: isSearching
                       ? searchResults
-                          .where((city) => ! GlobalCitiesManager().selectedCities.contains(city))
+                          .where((city) => !GlobalCitiesManager()
+                              .selectedCities
+                              .contains(city))
                           .length
                       : famousCities
-                          .where((city) => !GlobalCitiesManager().selectedCities.contains(city))
+                          .where((city) => !GlobalCitiesManager()
+                              .selectedCities
+                              .contains(city))
                           .length,
                   itemBuilder: (context, index) {
                     final city = isSearching
                         ? searchResults
-                            .where((city) => !GlobalCitiesManager().selectedCities.contains(city))
+                            .where((city) => !GlobalCitiesManager()
+                                .selectedCities
+                                .contains(city))
                             .toList()[index]
                         : famousCities
-                            .where((city) => !GlobalCitiesManager().selectedCities.contains(city))
+                            .where((city) => !GlobalCitiesManager()
+                                .selectedCities
+                                .contains(city))
                             .toList()[index];
                     return InkWell(
                       onTap: () {
@@ -297,8 +306,10 @@ class _SubscribeCitiesPageState extends State<SubscribeCitiesPage> {
                         },
                         child: Text("Enter"),
                         style: ElevatedButton.styleFrom(
-                          primary: Color.fromRGBO(250, 235, 216, 1),
-                          onPrimary: const Color.fromRGBO(35, 35, 35, 1),
+                          backgroundColor: const Color.fromRGBO(
+                              250, 235, 216, 1), 
+                          foregroundColor: const Color.fromRGBO(
+                              35, 35, 35, 1), 
                           padding: EdgeInsets.symmetric(
                               horizontal: 35.0, vertical: 12.0),
                           textStyle: TextStyle(fontSize: 16),
