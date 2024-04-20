@@ -13,7 +13,7 @@ class _AlarmClockPageState extends State<ClockPage> {
   TimeOfDay _selectedTime = TimeOfDay(hour: 8, minute: 0);
   Timer? timer;
   bool _alarmFired = false;
-  bool _isAlarmEnabled = true;  // 新增闹钟启用状态
+  bool _isAlarmEnabled = true; // 新增闹钟启用状态
   DateTime? _lastAlarmTime;
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
@@ -42,7 +42,7 @@ class _AlarmClockPageState extends State<ClockPage> {
     final now = DateTime.now();
     if (TimeOfDay(hour: now.hour, minute: now.minute) == _selectedTime &&
         !_alarmFired &&
-        _isAlarmEnabled &&  // Check if alarm is enabled
+        _isAlarmEnabled && // Check if alarm is enabled
         (_lastAlarmTime == null ||
             now.difference(_lastAlarmTime!).inMinutes >= 1)) {
       setState(() {
@@ -76,21 +76,21 @@ class _AlarmClockPageState extends State<ClockPage> {
       });
       _saveTime(time);
       if (_isAlarmEnabled) {
-        scheduleAlarm(time);  // Only schedule if alarm is enabled
+        scheduleAlarm(time); // Only schedule if alarm is enabled
       }
     }
   }
 
   Future<void> scheduleAlarm(TimeOfDay time) async {
     var scheduledNotificationDateTime =
-        DateTime.now().add(Duration(seconds: 10)); 
+        DateTime.now().add(Duration(seconds: 10));
     var androidDetails = const AndroidNotificationDetails(
-    'alarm_channel_id',  
-    'Alarm',             
-    importance: Importance.max,  
-    priority: Priority.high,     
-    fullScreenIntent: true,     
-);
+      'alarm_channel_id',
+      'Alarm',
+      importance: Importance.max,
+      priority: Priority.high,
+      fullScreenIntent: true,
+    );
 
     var iosDetails = IOSNotificationDetails();
     var generalDetails =
@@ -122,7 +122,6 @@ class _AlarmClockPageState extends State<ClockPage> {
         _selectedTime = TimeOfDay(hour: hour, minute: minute);
       });
     } else {
-     
       setState(() {
         _selectedTime = TimeOfDay(hour: 8, minute: 0);
       });
@@ -158,32 +157,34 @@ class _AlarmClockPageState extends State<ClockPage> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
-                    
                     Text(
                       'Alarm Time: ${_selectedTime.format(context)}',
-                      style: TextStyle(fontSize: 24, color: Color.fromRGBO(35, 35, 35,1)),
+                      style: TextStyle(
+                          fontSize: 24, color: Color.fromRGBO(35, 35, 35, 1)),
                     ),
                     SizedBox(height: 24),
                     ElevatedButton(
                       onPressed: _pickTime,
                       child: Text('Pick Time'),
                     ),
-                    SizedBox(height:60),
+                    SizedBox(height: 60),
                     ElevatedButton(
                       onPressed: () {
                         setState(() {
-                          _isAlarmEnabled = !_isAlarmEnabled;  
+                          _isAlarmEnabled = !_isAlarmEnabled;
                         });
                         if (_isAlarmEnabled) {
-                          scheduleAlarm(_selectedTime);  
+                          scheduleAlarm(_selectedTime);
                         } else {
-                          flutterLocalNotificationsPlugin.cancelAll();  
+                          flutterLocalNotificationsPlugin.cancelAll();
                         }
                       },
-                      child: Text(_isAlarmEnabled ? 'Disable Alarm' : 'Enable Alarm'),
+                      child: Text(
+                          _isAlarmEnabled ? 'Disable Alarm' : 'Enable Alarm'),
                       style: ElevatedButton.styleFrom(
-                        primary: _isAlarmEnabled ? const Color.fromARGB(255, 255, 255, 255) : Color.fromRGBO(202, 202, 202, 1)  
-                      ),
+                          backgroundColor: _isAlarmEnabled
+                              ? const Color.fromARGB(255, 255, 255, 255)
+                              : Color.fromRGBO(202, 202, 202, 1)),
                     ),
                   ],
                 ),
