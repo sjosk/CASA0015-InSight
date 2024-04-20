@@ -423,7 +423,6 @@ class _MyWidgetState extends State<WeatherPage> {
                     LineChartData(
                       lineTouchData: LineTouchData(
                         touchTooltipData: LineTouchTooltipData(
-                          tooltipBgColor: Colors.blueAccent,
                           getTooltipItems: (List<LineBarSpot> touchedBarSpots) {
                             return touchedBarSpots.map((barSpot) {
                               final flSpot = barSpot;
@@ -434,45 +433,72 @@ class _MyWidgetState extends State<WeatherPage> {
                             }).toList();
                           },
                         ),
-                        touchCallback: (LineTouchResponse touchResponse) {},
+                        touchCallback: (FlTouchEvent event,
+                            LineTouchResponse? touchResponse) {},
                         handleBuiltInTouches: true,
                       ),
                       gridData: FlGridData(show: false),
                       titlesData: FlTitlesData(
                         show: true,
-                        topTitles: SideTitles(
-                          showTitles: true,
-                          reservedSize: 0,
-                          getTitles: (value) {
-                            if (value.toInt() == maxTempIndex) {
-                              return 'max';
-                            }
+                        topTitles: AxisTitles(
+                          sideTitles: SideTitles(
+                            showTitles: true,
+                            reservedSize: 0,
+                            getTitlesWidget: (double value, TitleMeta meta) {
+                              const style = TextStyle(
+                                color: Color.fromARGB(255, 255, 255, 255),
+                                fontWeight: FontWeight.bold,
+                                fontSize: 12,
+                              );
 
-                            return '';
-                          },
-                          getTextStyles: (context, value) => const TextStyle(
-                            color: Color.fromARGB(255, 255, 255, 255),
-                            fontWeight: FontWeight.bold,
-                            fontSize: 12,
+                              if (value.toInt() == maxTempIndex) {
+                                return Padding(
+                                  padding:
+                                      EdgeInsets.all(6), // 根据你的布局需求调整padding值
+                                  child: Text('max', style: style),
+                                );
+                              }
+
+                              return Padding(
+                                padding:
+                                    EdgeInsets.all(6), // 根据你的布局需求调整padding值
+                                child: Text('', style: style),
+                              );
+                            },
                           ),
                         ),
-                        bottomTitles: SideTitles(
-                          showTitles: true,
-                          reservedSize: 0,
-                          getTitles: (value) {
-                            if (value.toInt() == minTempIndex) {
-                              return 'min';
-                            }
-                            return '';
-                          },
-                          getTextStyles: (context, value) => const TextStyle(
-                            color: Color.fromARGB(255, 255, 255, 255),
-                            fontWeight: FontWeight.bold,
-                            fontSize: 12,
+                        bottomTitles: AxisTitles(
+                          sideTitles: SideTitles(
+                            showTitles: true,
+                            reservedSize: 22, // 如果你需要预留空间的话，这里设置为你需要的值
+                            getTitlesWidget: (double value, TitleMeta meta) {
+                              final textStyle = TextStyle(
+                                color: Color.fromARGB(255, 255, 255, 255),
+                                fontWeight: FontWeight.bold,
+                                fontSize: 12,
+                              );
+
+                              String text;
+                              if (value.toInt() == maxTempIndex) {
+                                text = 'min'; // 这里是否应该是'max'，因为这是maxTempIndex?
+                              } else {
+                                text = '';
+                              }
+
+                              return Padding(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 4), // 水平方向的间距，根据实际情况调整
+                                child: Text(text, style: textStyle),
+                              );
+                            },
                           ),
                         ),
-                        leftTitles: SideTitles(showTitles: false),
-                        rightTitles: SideTitles(showTitles: false),
+                        leftTitles: AxisTitles(
+                          sideTitles: SideTitles(showTitles: false),
+                        ),
+                        rightTitles: AxisTitles(
+                          sideTitles: SideTitles(showTitles: false),
+                        ),
                       ),
                       borderData: FlBorderData(show: false),
                       minX: 0,
@@ -485,7 +511,7 @@ class _MyWidgetState extends State<WeatherPage> {
                         LineChartBarData(
                           spots: spots,
                           isCurved: true,
-                          colors: [const Color.fromRGBO(249, 234, 213, 1)],
+                          color: const Color.fromRGBO(249, 234, 213, 1),
                           barWidth: 2,
                           isStrokeCapRound: true,
                           dotData: FlDotData(
