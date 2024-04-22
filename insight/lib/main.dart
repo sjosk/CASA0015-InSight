@@ -22,7 +22,6 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
 class HomePage extends StatelessWidget {
   Widget _buildClickableArea(BuildContext context, {required Icon icon, required String text, required VoidCallback onTap}) {
     Icon adjustedIcon = Icon(icon.icon, size: 40.0, color: icon.color ?? Colors.white);
@@ -115,6 +114,15 @@ class _IndoorNavigationPageState extends State<IndoorNavigationPage> {
   String? from;
   String? to;
   String currentFloor = "Loading..."; // Default value before beacon is detected
+  String getNavigationInstructions(String from, String to) {
+     Map<String, String> navigationInstructions = {
+    'Main entrance-Cafe': 'Go through the door, Turn left, It is on your left-hand side',
+    // Add more navigation paths as needed
+  };
+
+    String key = '$from-$to';
+    return navigationInstructions[key] ?? 'No specific navigation instructions available for this route.';
+  }
 
   @override
   void initState() {
@@ -233,16 +241,21 @@ class _IndoorNavigationPageState extends State<IndoorNavigationPage> {
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    if (beacons.isNotEmpty && from != null && to != null) {
-                      speak("Navigating from $from to $to");
+                    if (from != null && to != null && !from!.isEmpty && !to!.isEmpty) {
+                      String instructions = getNavigationInstructions(from!, to!);
+                      speak(instructions);
                       vibratePhone();
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => ResultsPage(instructions: instructions)),
+                      );
                     } else {
                       speak("Please select both a starting and ending location");
                     }
                   },
                   style: ElevatedButton.styleFrom(
-                  primary: Theme.of(context).primaryColor, 
-                  onPrimary: Colors.white, 
+                    primary: Theme.of(context).primaryColor,
+                    onPrimary: Colors.white,
                   ),
                   child: Icon(Icons.search, size: 30),
                 ),
@@ -288,6 +301,54 @@ class _IndoorNavigationPageState extends State<IndoorNavigationPage> {
           onPressed: () => _listen(field),
         ),
       ],
+    );
+  }
+}
+
+  // Result Page
+class ResultsPage extends StatelessWidget {
+  final String instructions;
+
+  ResultsPage({required this.instructions});
+
+  @override
+  Widget build(BuildContext context) {
+    List<String> steps = instructions.split(', '); // Splits the instructions into steps based on commas.
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Follow Me'),
+        centerTitle: true,
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: ListView.builder(
+          itemCount: steps.length,
+          itemBuilder: (context, index) {
+            return ListTile(
+              contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+              leading: CircleAvatar(
+                backgroundColor: Colors.black,
+                child: Text(
+                  '${index + 1}',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+              title: Text(
+                steps[index],
+                style: TextStyle(
+                  fontSize: 18,
+                  height: 1.5,
+                ),
+                textAlign: TextAlign.justify,
+              ),
+            );
+          },
+        ),
+      ),
     );
   }
 }
