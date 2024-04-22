@@ -70,13 +70,13 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: flutter-apk
-          path: ${{ github.workspace }}/weatherappbuild/app/outputs/flutter-apk/app-release.apk
+          path: weatherapp/build/app/outputs/flutter-apk/app-release.apk
       
       - name: Save APPBUNDLE to Artifacts
         uses: actions/upload-artifact@v3
         with:
           name: flutter-appbundle
-          path: ${{ github.workspace }}/weatherappbuild/app/outputs/bundle/release/app-release.aab 
+          path: weatherapp/build/app/outputs/bundle/release/app-release.aab 
 
 
       - name: Create Github Release
