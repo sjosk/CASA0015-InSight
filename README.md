@@ -2,7 +2,7 @@
 Your best weather helper
 
 ## landingpage
-https://weathermate-gamma-xikd6ug.gamma.site/  
+[https://weathermate-gamma-xikd6ug.gamma.site/  ](https://zczqxc5.github.io/casa0015-mobile-assessment/landing_page/gesapp)
 
 ## stroyboard
 
