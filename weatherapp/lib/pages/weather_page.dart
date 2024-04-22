@@ -454,14 +454,14 @@ class _MyWidgetState extends State<WeatherPage> {
                               if (value.toInt() == maxTempIndex) {
                                 return Padding(
                                   padding:
-                                      EdgeInsets.all(6), // 根据你的布局需求调整padding值
+                                      EdgeInsets.all(6), 
                                   child: Text('max', style: style),
                                 );
                               }
 
                               return Padding(
                                 padding:
-                                    EdgeInsets.all(6), // 根据你的布局需求调整padding值
+                                    EdgeInsets.all(6), 
                                 child: Text('', style: style),
                               );
                             },
@@ -470,7 +470,7 @@ class _MyWidgetState extends State<WeatherPage> {
                         bottomTitles: AxisTitles(
                           sideTitles: SideTitles(
                             showTitles: true,
-                            reservedSize: 22, // 如果你需要预留空间的话，这里设置为你需要的值
+                            reservedSize: 22, 
                             getTitlesWidget: (double value, TitleMeta meta) {
                               final textStyle = TextStyle(
                                 color: Color.fromARGB(255, 255, 255, 255),
@@ -479,15 +479,15 @@ class _MyWidgetState extends State<WeatherPage> {
                               );
 
                               String text;
-                              if (value.toInt() == maxTempIndex) {
-                                text = 'min'; // 这里是否应该是'max'，因为这是maxTempIndex?
+                              if (value.toInt() == minTempIndex) {
+                                text = 'min'; 
                               } else {
                                 text = '';
                               }
 
                               return Padding(
                                 padding: EdgeInsets.symmetric(
-                                    horizontal: 4), // 水平方向的间距，根据实际情况调整
+                                    horizontal: 4), 
                                 child: Text(text, style: textStyle),
                               );
                             },

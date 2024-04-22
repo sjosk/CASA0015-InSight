@@ -6,7 +6,7 @@ import 'package:weatherapp/firebase_options.dart';
 import 'package:weatherapp/models/firebase_api.dart';
 import 'MainScreen.dart';
 import 'pages/enter_page.dart'; 
-import 'pages/alarm_pop.dart'; 
+import 'pages/weather_page.dart'; 
 
 
 void main() async {
@@ -27,7 +27,7 @@ await Firebase.initializeApp(
       onSelectNotification: (String? payload) async {
         runApp(
           MaterialApp(
-            home: AlarmPop(), 
+            home: WeatherPage(forecastDetails: '',), 
           )
         );
       }
