@@ -4,6 +4,9 @@ import 'package:flutter_tts/flutter_tts.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 import 'package:vibration/vibration.dart';
 import 'dart:async'; 
+import 'package:url_launcher/url_launcher.dart';
+import 'dart:math';
+import 'package:collection/collection.dart';
 
 
 void main() => runApp(MyApp());
@@ -23,14 +26,14 @@ class MyApp extends StatelessWidget {
   }
 }
 class HomePage extends StatelessWidget {
-  Widget _buildClickableArea(BuildContext context, {required Icon icon, required String text, required VoidCallback onTap}) {
+  Widget _buildClickableArea(BuildContext context, {required Icon icon, required String text, required VoidCallback onTap, required Color backgroundColor, }) {
     Icon adjustedIcon = Icon(icon.icon, size: 40.0, color: icon.color ?? Colors.white);
     return InkWell(
       onTap: onTap,
       child: Container(
         padding: EdgeInsets.symmetric(vertical: 100.0),
         decoration: BoxDecoration(
-          color: Theme.of(context).primaryColor,
+          color: backgroundColor,
           border: Border(
             bottom: BorderSide(color: Theme.of(context).dividerColor),
           ),
@@ -43,9 +46,9 @@ class HomePage extends StatelessWidget {
             Text(
               text,
               style: TextStyle(
-                fontSize: 24.0,
+                fontSize: 28.0,
                 fontWeight: FontWeight.bold,
-                color: Theme.of(context).primaryColorDark,
+                color:  Colors.white,
               ),
             ),
           ],
@@ -62,7 +65,8 @@ class HomePage extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Icon(Icons.visibility),
+            //Icon(Icons.visibility),
+            Image.asset('assets/images/icon.png', width: 40, height: 40),
             SizedBox(width: 8),
             Text('InSight'),
           ],
@@ -77,19 +81,19 @@ class HomePage extends StatelessWidget {
             context,
             icon: Icon(Icons.route),
             text: 'Indoor Guidance',
-            onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => IndoorNavigationPage())),
+            onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => IndoorNavigationPage())),backgroundColor: Color.fromARGB(244, 224, 169, 3),
           ),
           _buildClickableArea(
             context,
             icon: Icon(Icons.elevator_rounded),
             text: 'Floor Transition',
-            onTap: () => Navigator.push(context,MaterialPageRoute(builder: (context) => FloorTransitionPage())),
+            onTap: () => Navigator.push(context,MaterialPageRoute(builder: (context) => FloorTransitionPage())),backgroundColor:  Color.fromARGB(244, 14, 106, 197),
           ),
           _buildClickableArea(
             context,
             icon: Icon(Icons.directions_walk),
             text: 'Emergency',
-            onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => EmergencyPage())),
+            onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => EmergencyPage())),backgroundColor:  Color.fromARGB(255, 228, 43, 43),
           ),
         ],
       ),
@@ -160,7 +164,7 @@ class _IndoorNavigationPageState extends State<IndoorNavigationPage> {
   void initBeaconScanning() async {
   try {
     await flutterBeacon.initializeScanning; 
-    final regions = [Region(identifier: 'all')]; // Scanning all beacons
+    final regions = [Region(identifier: 'myBeacon', proximityUUID: 'FDA50693-A4E2-4FB1-AFCF-C6EB07647825')];
     flutterBeacon.ranging(regions).listen((RangingResult result) {
       if (result.beacons.isNotEmpty) {
         setState(() {
@@ -338,7 +342,7 @@ class ResultsPage extends StatelessWidget {
     List<String> steps = instructions.split(', '); // Splits the instructions into steps based on commas.
     return Scaffold(
       appBar: AppBar(
-        title: Text('Follow Me'),
+        title: Text('Follow InSight'),
         centerTitle: true,
       ),
       body: Padding(
@@ -383,6 +387,8 @@ class FloorTransitionPage extends StatefulWidget {
 
 class _FloorTransitionPageState extends State<FloorTransitionPage> {
   String currentFloor = "Scanning...";
+  double distanceToLift = 0.0;
+  double distanceToStairs = 0.0;
   StreamSubscription<RangingResult>? beaconSubscription;
 
   @override
@@ -393,15 +399,23 @@ class _FloorTransitionPageState extends State<FloorTransitionPage> {
 
   void initBeaconScanning() async {
     try {
-      // Ensure the beacon scanning is initialized
-      await flutterBeacon.initializeScanning; 
-      // Define the regions here, inside the try block after initializing scanning
-      final regions = [Region(identifier: 'all')]; // Scanning all beacons
+      await flutterBeacon.initializeScanning;
+      final regions = [Region(identifier: 'myBeacon', proximityUUID: 'FDA50693-A4E2-4FB1-AFCF-C6EB07647825')];
       beaconSubscription = flutterBeacon.ranging(regions).listen((RangingResult result) {
         if (result.beacons.isNotEmpty) {
+          result.beacons.sort((a, b) => a.rssi.compareTo(b.rssi)); 
           setState(() {
-            result.beacons.sort((a, b) => a.rssi.compareTo(b.rssi)); // Sorting by signal strength
-            currentFloor = "Floor ${result.beacons.first.major}"; // Updating the floor number
+            currentFloor = "Floor ${result.beacons.first.major}";
+            // Using firstWhereOrNull to safely handle no matches
+            var liftBeacon = result.beacons.firstWhereOrNull((b) => b.major == 2 && b.minor == 100);
+            var stairsBeacon = result.beacons.firstWhereOrNull((b) => b.major == 2 && b.minor == 4106);
+
+            if (liftBeacon != null) {
+              distanceToLift = calculateDistance(liftBeacon.rssi, -59);
+            }
+            if (stairsBeacon != null) {
+              distanceToStairs = calculateDistance(stairsBeacon.rssi, -59);
+            }
           });
         } else {
           print('No beacons detected');
@@ -412,6 +426,10 @@ class _FloorTransitionPageState extends State<FloorTransitionPage> {
     }
   }
 
+  double calculateDistance(int rssi, int txPower) {
+    return pow(10, ((txPower - rssi) / (10 * 2.0))) as double;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -420,43 +438,69 @@ class _FloorTransitionPageState extends State<FloorTransitionPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text('You are current in \n $currentFloor floor', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+            Text('You are currently on \n$currentFloor Floor', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
             SizedBox(height: 20),
-            ElevatedButton(onPressed: () => navigateToStairs(context), child: Text('Take Lift')),
-            SizedBox(height: 10),
-            ElevatedButton(onPressed: () => navigateToElevator(context), child: Text('Take Stairs')),
+            Text('Distance to lift: ${distanceToLift.toStringAsFixed(2)} meters', style: TextStyle(fontSize: 16)),
+            SizedBox(height: 20),
+            Text('Distance to stairs: ${distanceToStairs.toStringAsFixed(2)} meters', style: TextStyle(fontSize: 16)),
           ],
         ),
       ),
     );
   }
 
-  void navigateToStairs(BuildContext context) {
-    // Logic for navigating with stairs
-  }
-
-  void navigateToElevator(BuildContext context) {
-    // Logic for navigating with lift
-  }
-
   @override
   void dispose() {
-    // Cancel the beacon subscription to prevent memory leaks
     beaconSubscription?.cancel();
     super.dispose();
   }
 }
 
 
+
 //Emergency Page
-class EmergencyPage extends StatelessWidget {
+class EmergencyPage extends StatefulWidget {
+  @override
+  _EmergencyPageState createState() => _EmergencyPageState();
+}
+
+class _EmergencyPageState extends State<EmergencyPage> {
+  final String emergencyNumber = "999";  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('Emergency')),
-      body: Center(
-        child: Text('Emergency Page'),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text(
+              'Leading you to the main entrance by taking stairs.',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              textAlign: TextAlign.center,
+            ),
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: _makePhoneCall,
+              child: Text('Call Emergency', style: TextStyle(fontSize: 16)),
+              style: ElevatedButton.styleFrom(
+                primary: Colors.red,
+                onPrimary: Colors.white,
+              ),
+            ),
+          ],
+        ),
       ),
     );
+  }
+
+  void _makePhoneCall() async {
+    Uri url = Uri.parse("tel:$emergencyNumber");
+    if (await canLaunchUrl(url)) {
+      await launchUrl(url);
+    } else {
+      throw 'Could not launch $url';
+    }
   }
 }
