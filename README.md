@@ -1,19 +1,22 @@
 # <img src="https://github.com/zczqxc5/casa0015-mobile-assessment/blob/main/Resourses/Untitled-1.png" width=6% height=6%> Morning Weather
 √ Your best weather helper. Get real-time weather updates, forecasts, and smart reminders to stay prepared for any weather condition.  
 √ You will never forget to bring your umbrella with our service
+![image](https://github.com/zczqxc5/casa0015-mobile-assessment/assets/146037962/69e7a35b-3c69-44e2-a63c-d7b1b99dc97a)
 
 ## landingpage
 [https://weathermate-gamma-xikd6ug.gamma.site/  ](https://zczqxc5.github.io/casa0015-mobile-assessment/landing_page/gesapp)
 
+## Video Instruction
+https://youtu.be/XrG7FGl-_2E
+
 ## How to Download
-Clone folder, get apk file from folder <casa0015-mobile-assessment\weatherapp\build\app\outputs\flutter-apk\app-release.apk>
+Action --> Details --> Download flutter-apk
 
 ## Stroyboard
 Our Target Users are Lazy/have bad memory to check Weather, or cross-city workers
 ![alt text](https://github.com/zczqxc5/casa0015-mobile-assessment/blob/main/Resourses/storyboard.jpg)
 
-## Framework
-![image](https://github.com/zczqxc5/casa0015-mobile-assessment/assets/146037962/69e7a35b-3c69-44e2-a63c-d7b1b99dc97a)
+
 
 ## Functions
 1. Comprehensive Weather Data

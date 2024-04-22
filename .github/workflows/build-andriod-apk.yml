@@ -26,7 +26,10 @@ jobs:
         with:
           java-version: '11'
           distribution: microsoft
-
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
       #  Decode keystore File from repository secrets
       #  Keep the keystore file private; don't check it into public source control!
       
@@ -64,23 +67,26 @@ jobs:
         run: flutter build appbundle --release
 
       - name: Save APK to Artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: flutter-apk
-          path: build/app/outputs/flutter-apk/*.apk
+          path: weatherapp/build/app/outputs/flutter-apk/app-release.apk
 
       - name: Save APPBUNDLE to Artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: flutter-appbundle
-          path: build/app/outputs/bundle/release/*.aab
+          path: weatherapp/build/app/outputs/bundle/release/app-release.aab 
+
 
       - name: Create Github Release
         uses: ncipollo/release-action@v1
         with:
-          artifacts: "build/app/outputs/bundle/release/*.aab,build/app/outputs/flutter-apk/*.apk"
+          artifacts: "build/app/outputs/bundle/release/app-release.aab,build/app/outputs/flutter-apk/app-release.apk"
           tag: "v${{ steps.get_flutter_app_version.outputs.TAG_VERSION }}"
-          # token: ${{ secrets.PERSONAL_RELEASE_TOKEN }}
+          skipIfReleaseExists: true
+          token: ${{ secrets.GITHUB_TOKEN }}
+
 
   # TODO:  Upload to Firebase - for App Distribution
   # Release job, upload the apk or aab to Firebase App Distribution
