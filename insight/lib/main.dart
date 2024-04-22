@@ -327,7 +327,6 @@ class _IndoorNavigationPageState extends State<IndoorNavigationPage> {
     );
   }
 }
-
   // Result Page
 class ResultsPage extends StatelessWidget {
   final String instructions;
@@ -423,9 +422,9 @@ class _FloorTransitionPageState extends State<FloorTransitionPage> {
           children: <Widget>[
             Text('You are current in \n $currentFloor floor', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
             SizedBox(height: 20),
-            ElevatedButton(onPressed: () => navigateToStairs(context), child: Text('Take Stairs')),
+            ElevatedButton(onPressed: () => navigateToStairs(context), child: Text('Take Lift')),
             SizedBox(height: 10),
-            ElevatedButton(onPressed: () => navigateToElevator(context), child: Text('Take rLift')),
+            ElevatedButton(onPressed: () => navigateToElevator(context), child: Text('Take Stairs')),
           ],
         ),
       ),
