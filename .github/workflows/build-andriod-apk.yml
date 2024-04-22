@@ -26,7 +26,10 @@ jobs:
         with:
           java-version: '11'
           distribution: microsoft
-
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
       #  Decode keystore File from repository secrets
       #  Keep the keystore file private; don't check it into public source control!
       
