@@ -10,7 +10,7 @@
 https://youtu.be/XrG7FGl-_2E
 
 ## How to Download
-Clone folder, get apk file from folder <casa0015-mobile-assessment\weatherapp\build\app\outputs\flutter-apk\app-release.apk>
+Action --> Details --> Download flutter-apk
 
 ## Stroyboard
 Our Target Users are Lazy/have bad memory to check Weather, or cross-city workers
