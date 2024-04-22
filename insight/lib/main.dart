@@ -110,18 +110,41 @@ class _IndoorNavigationPageState extends State<IndoorNavigationPage> {
   final stt.SpeechToText _speech = stt.SpeechToText();
   bool _isListening = false;
   String _currentField = '';
-  List<String> locations = ['Main entrance', 'CE Lab', 'Cafe', '1F Toilet', '2F Toilet']; 
+  List<String> locations = ['Main entrance', 'CE LAB', 'Cafe', '1F Toilet', '2F Toilet']; 
   String? from;
   String? to;
   String currentFloor = "Loading..."; // Default value before beacon is detected
   String getNavigationInstructions(String from, String to) {
      Map<String, String> navigationInstructions = {
     'Main entrance-Cafe': 'Go through the door, Turn left, It is on your left-hand side',
-    // Add more navigation paths as needed
+    'Main entrance-1F Toilet': 'Go through the door, Turn Left and go straight, Tap your UCL card at your right hand side in front of the door, Toilet is on your right hand side when you enter the door',
+    'Main entrance-CE LAB': 'Go through the door, Turn Left and go straight find the lift, Take the lift to Second Floor, Get out of the lift and turn left, After 3 meter turn right and go straight, Walk until the end and turn left, Tap your UCL card on your right hand side, Go straight till the end and push the door, CE LAB is on your right hand side',
+    'Main entrance-2F Toilet': 'Go through the door, Turn Left and go straight find the lift, Take the lift to Second Floor, Get out of the lift and turn left, After 3 meter turn right and go straight, Walk until the end and turn left,Tap your UCL card on your right hand side, Go straight about 7 meter, Toilet entrance is on the right',
+    'Cafe-Main entrance':'Turn right and go straight, It is on your right hand side',
+    'Cafe-1F Toilet':'Turn Left and go straight, There is a door and please tap your UCL card on the right side, Go through the door and it is on your left side',
+    'Cafe-CE LAB':'Go Straight 2 meter there are lifts on your left side, Take the lift to Second Floor, Get out of the lift and turn left, After 3 meter turn right and go straight, Walk until the end and turn left, Tap your UCL card on your right hand side, Go straight until the end and push the door, CE LAB is on your right hand side',
+    'Cafe-2F Toilet':'Go Straight 2 meter there are lifts on your left side, Take the lift to Second Floor, Get out of the lift and turn left, After 3 meter turn right and go straight, Walk till the end and turn left, Tap your UCL card on your right hand side, Go straight about 7 meter, Toilet entrance is on the right',
+    '1F Toilet-Main entrance':'Turn right and push the button on your right side to open the door, Pass through the door and go straight 6 meter, Main Entrance is on your right hand side',
+    '1F Toilet-Cafe':'Turn right and push the button on your right side to open the door, Pass through the door and go straight 2 meter, Main Entrance is on your right hand side',
+    '1F Toilet-CE LAB':'Turn right and push the button on your right side to open the door, Pass through the door and turn left, Lifts are on your left hand side, Take the lift to Second Floor, Get out of the lift and turn left, After 3 meter turn right and go straight, Walk until the end and turn left, Tap your UCL card on your right hand side, Go straight until the end and push the door, CE LAB is on your right hand side',
+    '1F Toilet-2F Toilet':'Turn right and push the button on your right side to open the door, Pass through the door and turn left, Lifts are on your left hand side, Take the lift to Second Floor, Get out of the lift and turn left, After 3 meter turn right and go straight, Walk until the end and turn left, Tap your UCL card on your right hand side, Go straight about 7 meter, Toilet entrance is on the right',
+    'CE LAB-Main entrance':'Pass through the door on your left, Go straight until the end and press the button on your right side, Out of the door turn right and go straight 8 meter, Lifts are on your left side, Take the lift to first floor, Go straight 4 meter and turn right',
+    'CE LAB-Cafe':'Pass through the door on your left, Go straight until the end and press the button on your right side, Out of the door turn right and go straight 8 meter, Lifts are on your left side,Take the lift to first floor, Go straight 2 meter and turn right',
+    'CE LAB-1F Toilet':'Pass through the door on your left, Go straight until the end and press the button on your right side, Out of the door turn right and go straight 8 meter,Lifts are on your left side,Take the lift to first floor, Turn right and go forward 1m and turn right again, There is a door and please tap your UCL card on the right side, Go through the door and it is on ypur left side',
+    'CE LAB-2F Toilet':'Pass through the door on your left, Go straight 3 meter, Toilet entrance is on your left hand side',
+    '2F Toilet-Main entrance':'Turn left when you pass through the toilet entrance door, Go straight till the end and press the button on your right side, Out of the door turn right and go straight 8 meter, Lifts are on your left side, Take the lift to first floor, Go straight 4m and turn right',
+    '2F Toilet-Cafe':'Turn left when you pass through the toilet entrance door, Go straight till the end and press the button on your right side, Out of the door turn right and go straight 8 meter, Lifts are on your left side, Take the lift to first floor, Go straight 2 meter and turn right',
+    '2F Toilet-CE LAB':'Turn right when you pass through the toilet entrance door, Go straight until the end and pull the door, CE LAB is on your right hand side',
+    '2F Toilet-1F Toilet':'Turn left when you pass through the toilet entrance door, Go straight till the end and press the button on your right side,Out of the door turn right and go straight 8 meter, Lifts are on your left side, Take the lift to first floor, Turn right and go forward 1m and turn right again, There is a door and please tap your UCL card on the right side, Go through the door and it is on ypur left side',
+    'Main entrance-Mainentrance':'You are right here!',
+    'Cafe-Cafe':'You are right here!',
+    '1F Toilet-1F Toilet':'You are right here!',
+    '2F Toilet-2F Toilet':'You are right here!',
+    'CE LAB-CE LAB':'You are right here!',
   };
 
     String key = '$from-$to';
-    return navigationInstructions[key] ?? 'No specific navigation instructions available for this route.';
+    return navigationInstructions[key] ?? 'No specific navigation instructions, available for this route.';
   }
 
   @override
