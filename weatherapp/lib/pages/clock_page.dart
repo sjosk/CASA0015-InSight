@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:weatherapp/pages/alarm_pop.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:timezone/data/latest.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
 
 class ClockPage extends StatefulWidget {
   @override
@@ -13,7 +15,7 @@ class _AlarmClockPageState extends State<ClockPage> {
   TimeOfDay _selectedTime = TimeOfDay(hour: 8, minute: 0);
   Timer? timer;
   bool _alarmFired = false;
-  bool _isAlarmEnabled = true; // 新增闹钟启用状态
+  bool _isAlarmEnabled = true;
   DateTime? _lastAlarmTime;
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
@@ -21,11 +23,12 @@ class _AlarmClockPageState extends State<ClockPage> {
   @override
   void initState() {
     super.initState();
+    tz.initializeTimeZones();
     var initializationSettingsAndroid =
         AndroidInitializationSettings('@mipmap/ic_launcher');
-    var initializationSettingsIOS = IOSInitializationSettings();
-    var initializationSettings = InitializationSettings(
-        android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
+
+    var initializationSettings =
+        InitializationSettings(android: initializationSettingsAndroid);
     flutterLocalNotificationsPlugin.initialize(initializationSettings);
 
     _loadTime();
@@ -36,6 +39,34 @@ class _AlarmClockPageState extends State<ClockPage> {
   void dispose() {
     timer?.cancel();
     super.dispose();
+  }
+
+  Future<void> scheduleAlarm(TimeOfDay time) async {
+    final now = tz.TZDateTime.now(tz.local);
+    final scheduledNotificationDateTime = tz.TZDateTime(
+        tz.local, now.year, now.month, now.day, time.hour, time.minute);
+
+    var androidDetails = const AndroidNotificationDetails(
+      'alarm_channel_id',
+      'Alarm',
+      importance: Importance.max,
+      priority: Priority.high,
+      fullScreenIntent: true,
+    );
+
+    var generalDetails = NotificationDetails(android: androidDetails);
+
+    await flutterLocalNotificationsPlugin.zonedSchedule(
+      0,
+      'Time to Wake Up!',
+      'Your alarm is ringing!',
+      scheduledNotificationDateTime,
+      generalDetails,
+      androidAllowWhileIdle: true,
+      uiLocalNotificationDateInterpretation:
+          UILocalNotificationDateInterpretation.absoluteTime,
+      matchDateTimeComponents: DateTimeComponents.time,
+    );
   }
 
   void checkTime() {
@@ -79,31 +110,6 @@ class _AlarmClockPageState extends State<ClockPage> {
         scheduleAlarm(time); // Only schedule if alarm is enabled
       }
     }
-  }
-
-  Future<void> scheduleAlarm(TimeOfDay time) async {
-    var scheduledNotificationDateTime =
-        DateTime.now().add(Duration(seconds: 10));
-    var androidDetails = const AndroidNotificationDetails(
-      'alarm_channel_id',
-      'Alarm',
-      importance: Importance.max,
-      priority: Priority.high,
-      fullScreenIntent: true,
-    );
-
-    var iosDetails = IOSNotificationDetails();
-    var generalDetails =
-        NotificationDetails(android: androidDetails, iOS: iosDetails);
-
-    await flutterLocalNotificationsPlugin.schedule(
-      0,
-      'Time to Wake Up!',
-      'Your alarm is ringing!',
-      scheduledNotificationDateTime,
-      generalDetails,
-      androidAllowWhileIdle: true,
-    );
   }
 
   Future<void> _saveTime(TimeOfDay time) async {

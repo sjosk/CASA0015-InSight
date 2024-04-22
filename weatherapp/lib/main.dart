@@ -6,7 +6,7 @@ import 'package:weatherapp/firebase_options.dart';
 import 'package:weatherapp/models/firebase_api.dart';
 import 'MainScreen.dart';
 import 'pages/enter_page.dart'; 
-import 'pages/weather_page.dart'; 
+
 
 
 void main() async {
@@ -17,21 +17,15 @@ await Firebase.initializeApp(
 
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
   var initializationSettingsAndroid = AndroidInitializationSettings('@mipmap/ic_launcher');
-  var initializationSettingsIOS = IOSInitializationSettings();
+  
   var initializationSettings = InitializationSettings(
-      android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
+      android: initializationSettingsAndroid);
 
   await FirebaseApi().initNoticfications();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  await flutterLocalNotificationsPlugin.initialize(initializationSettings,
-      onSelectNotification: (String? payload) async {
-        runApp(
-          MaterialApp(
-            home: WeatherPage(forecastDetails: '',), 
-          )
-        );
-      }
-  );
+  
+  await flutterLocalNotificationsPlugin.initialize(initializationSettings);
+  
 
   runApp(MyApp());
 }
