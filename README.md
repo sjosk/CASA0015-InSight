@@ -5,6 +5,9 @@
 ## landingpage
 [https://weathermate-gamma-xikd6ug.gamma.site/  ](https://zczqxc5.github.io/casa0015-mobile-assessment/landing_page/gesapp)
 
+## Video Instruction
+https://youtu.be/XrG7FGl-_2E
+
 ## How to Download
 Clone folder, get apk file from folder <casa0015-mobile-assessment\weatherapp\build\app\outputs\flutter-apk\app-release.apk>
 
