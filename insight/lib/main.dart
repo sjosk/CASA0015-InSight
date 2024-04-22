@@ -3,6 +3,7 @@ import 'package:flutter_beacon/flutter_beacon.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 import 'package:vibration/vibration.dart';
+import 'dart:async'; 
 
 
 void main() => runApp(MyApp());
@@ -299,9 +300,7 @@ class FloorTransitionPage extends StatefulWidget {
 
 class _FloorTransitionPageState extends State<FloorTransitionPage> {
   String currentFloor = "Scanning...";
-  final beaconStream = flutterBeacon.ranging(<Region>[
-    Region(identifier: 'all'),
-  ]);
+  StreamSubscription<RangingResult>? beaconSubscription;
 
   @override
   void initState() {
@@ -310,48 +309,39 @@ class _FloorTransitionPageState extends State<FloorTransitionPage> {
   }
 
   void initBeaconScanning() async {
-    await flutterBeacon.initializeAndCheckScanning;
-
-    // Listen to beacon ranging stream
-    beaconStream.listen((RangingResult result) {
-      if (result.beacons.isNotEmpty) {
-        // Sort beacons based on RSSI to get the closest one
-        result.beacons.sort((a, b) => a.rssi.compareTo(b.rssi));
-        Beacon closestBeacon = result.beacons.first;
-
-        setState(() {
-          currentFloor = "Floor ${closestBeacon.major}";
-        });
-      }
-    }, onError: (error) {
-      setState(() {
-        currentFloor = "Error in scanning";
+    try {
+      // Ensure the beacon scanning is initialized
+      await flutterBeacon.initializeScanning; 
+      // Define the regions here, inside the try block after initializing scanning
+      final regions = [Region(identifier: 'all')]; // Scanning all beacons
+      beaconSubscription = flutterBeacon.ranging(regions).listen((RangingResult result) {
+        if (result.beacons.isNotEmpty) {
+          setState(() {
+            result.beacons.sort((a, b) => a.rssi.compareTo(b.rssi)); // Sorting by signal strength
+            currentFloor = "Floor ${result.beacons.first.major}"; // Updating the floor number
+          });
+        } else {
+          print('No beacons detected');
+        }
       });
-      print("Error in beacon scanning: $error");
-    });
+    } catch (e) {
+      print('Error initializing beacon scanning: $e');
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Floor Transition'),
-      ),
+      appBar: AppBar(title: Text('Floor Transition')),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text('Current Floor: $currentFloor', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
             SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () => navigateToStairs(context),
-              child: Text('Stairs'),
-            ),
+            ElevatedButton(onPressed: () => navigateToStairs(context), child: Text('Stairs')),
             SizedBox(height: 10),
-            ElevatedButton(
-              onPressed: () => navigateToElevator(context),
-              child: Text('Elevator'),
-            ),
+            ElevatedButton(onPressed: () => navigateToElevator(context), child: Text('Elevator')),
           ],
         ),
       ),
@@ -359,14 +349,20 @@ class _FloorTransitionPageState extends State<FloorTransitionPage> {
   }
 
   void navigateToStairs(BuildContext context) {
-    // Define navigation or action for stairs
+    // Logic for navigating with stairs
   }
 
   void navigateToElevator(BuildContext context) {
-    // Define navigation or action for elevator
+    // Logic for navigating with elevator
+  }
+
+  @override
+  void dispose() {
+    // Cancel the beacon subscription to prevent memory leaks
+    beaconSubscription?.cancel();
+    super.dispose();
   }
 }
-
 
 
 //Emergency Page
