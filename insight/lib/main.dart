@@ -339,9 +339,9 @@ class _FloorTransitionPageState extends State<FloorTransitionPage> {
           children: <Widget>[
             Text('Current Floor: $currentFloor', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
             SizedBox(height: 20),
-            ElevatedButton(onPressed: () => navigateToStairs(context), child: Text('Stairs')),
+            ElevatedButton(onPressed: () => navigateToStairs(context), child: Text('Take Stairs')),
             SizedBox(height: 10),
-            ElevatedButton(onPressed: () => navigateToElevator(context), child: Text('Elevator')),
+            ElevatedButton(onPressed: () => navigateToElevator(context), child: Text('Take Lift')),
           ],
         ),
       ),
