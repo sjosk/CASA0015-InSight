@@ -67,13 +67,13 @@ jobs:
         run: flutter build appbundle --release
 
       - name: Save APK to Artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: flutter-apk
           path: weatherapp/build/app/outputs/flutter-apk/app-release.apk
-      
+
       - name: Save APPBUNDLE to Artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: flutter-appbundle
           path: weatherapp/build/app/outputs/bundle/release/app-release.aab 
