@@ -337,11 +337,11 @@ class _FloorTransitionPageState extends State<FloorTransitionPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text('Current Floor: $currentFloor', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+            Text('You are current in \n $currentFloor floor', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
             SizedBox(height: 20),
             ElevatedButton(onPressed: () => navigateToStairs(context), child: Text('Take Stairs')),
             SizedBox(height: 10),
-            ElevatedButton(onPressed: () => navigateToElevator(context), child: Text('Take Lift')),
+            ElevatedButton(onPressed: () => navigateToElevator(context), child: Text('Take rLift')),
           ],
         ),
       ),
@@ -353,7 +353,7 @@ class _FloorTransitionPageState extends State<FloorTransitionPage> {
   }
 
   void navigateToElevator(BuildContext context) {
-    // Logic for navigating with elevator
+    // Logic for navigating with lift
   }
 
   @override
