@@ -12,4 +12,5 @@ class MainActivity: FlutterActivity(), SensorEventListener {
     private var pressure: Float = 0.0f
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
-        MethodChannel(flutterEngine.dartExecutor.binaryMessenger, "com.yourcompany.barometer
+    MethodChannel(flutterEngine.dartExecutor.binaryMessenger, "com.yourcompany.barometer")}
+}

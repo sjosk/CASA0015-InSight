@@ -386,7 +386,6 @@ class FloorTransitionPage extends StatefulWidget {
   @override
   _FloorTransitionPageState createState() => _FloorTransitionPageState();
 }
-
 class _FloorTransitionPageState extends State<FloorTransitionPage> {
   String currentFloor = "Scanning...";
   double distanceToLift = 0.0;
@@ -478,6 +477,7 @@ class _FloorTransitionPageState extends State<FloorTransitionPage> {
     super.dispose();
   }
 }
+
 //Emergency Page
 class EmergencyPage extends StatefulWidget {
   @override
