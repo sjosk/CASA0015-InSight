@@ -21,10 +21,11 @@ jobs:
         uses: actions/checkout@v3     # Checkout the Repository on the Virtual Machine
 
       - name: Set up JDK              # Setup JAVA to build the Android APK for us
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
-          java-version: '11'
-          distribution: microsoft
+          java-version: '21'
+          distribution: 'temurin' # See 'Supported distributions' for available options
+          
 
       #  Decode keystore File from repository secrets
       #  Keep the keystore file private; don't check it into public source control!
