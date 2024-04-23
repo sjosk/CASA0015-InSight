@@ -40,8 +40,7 @@ The app incorporates external libraries such as Flutter Beacon for beacon intera
 - `speech_to_text: 6.6.1`  plugin for converting spoken words into text  
 - `flutter_beacon: 0.5.1`  plugin for working with Bluetooth beacons. It is used for ranging and monitoring beacon devices  
 - `url_launcher: 6.0.12`   plugin that enables you to launch URLs  
-- `flutter_launcheer_icons: 0.9.2`  plugin for icons  
-
+- `flutter_launcheer_icons: 0.9.2`  plugin for icons
 
 ## Biblography
 
@@ -50,13 +49,6 @@ The app incorporates external libraries such as Flutter Beacon for beacon intera
 3. Dart packages. (2024) speech_to_text: 6.6.1 | Dart Package.  Available at: <https://pub.dev/packages/speech_to_text> (Accessed 27 March 2024).
 4. satyyyaamm (2024) 'Integrating iBeacons in Flutter: A Step-by-Step Guide', Medium, 7 January. Available at: <https://medium.com/@satyamt5152/integrating-ibeacons-in-flutter-a-step-by-step-guide-628b9bbe438f> (Accessed 29 March 2024).
 
-----
 
-## Declaration of Authorship
-
-I, SJ. Wu, confirm that the work presented in this assessment is my own. Where information has been derived from other sources, I confirm that this has been indicated in the work.
-
-
-SJ. Wu
-
-23 Apr 2024
+# ✉️ Keep in touch  
+SJ. Wu: cepwsj@gmail.com If you'd like to contribute to the app, don't hestite to get in contact with me.
