@@ -261,8 +261,8 @@ class _IndoorNavigationPageState extends State<IndoorNavigationPage> {
                   }
                   },
                   style: ElevatedButton.styleFrom(
-                  primary: Theme.of(context).primaryColor, 
-                  onPrimary: Colors.white, 
+                  backgroundColor: Theme.of(context).primaryColor, 
+                  foregroundColor: Colors.white, 
                   ),
                   child: Icon(Icons.swap_horiz, size: 30),
                 ),
@@ -281,8 +281,8 @@ class _IndoorNavigationPageState extends State<IndoorNavigationPage> {
                     }
                   },
                   style: ElevatedButton.styleFrom(
-                    primary: Theme.of(context).primaryColor,
-                    onPrimary: Colors.white,
+                    backgroundColor: Theme.of(context).primaryColor,
+                    foregroundColor: Colors.white,
                   ),
                   child: Icon(Icons.search, size: 30),
                 ),
@@ -390,6 +390,7 @@ class _FloorTransitionPageState extends State<FloorTransitionPage> {
   double distanceToLift = 0.0;
   double distanceToStairs = 0.0;
   StreamSubscription<RangingResult>? beaconSubscription;
+   String? selectedOption;
 
   @override
   void initState() {
@@ -430,20 +431,40 @@ class _FloorTransitionPageState extends State<FloorTransitionPage> {
     return pow(10, ((txPower - rssi) / (10 * 2.0))) as double;
   }
 
-  @override
+ @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('Floor Transition')),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text('You are currently on \n$currentFloor Floor', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-            SizedBox(height: 20),
-            Text('Distance to lift: ${distanceToLift.toStringAsFixed(2)} meters', style: TextStyle(fontSize: 16)),
-            SizedBox(height: 20),
-            Text('Distance to stairs: ${distanceToStairs.toStringAsFixed(2)} meters', style: TextStyle(fontSize: 16)),
-          ],
+        
+        child: Padding(
+          padding: EdgeInsets.all(20.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center, // Center horizontally
+            children: <Widget>[
+              Text('You are currently on \n$currentFloor Floor', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold), textAlign: TextAlign.center),
+              SizedBox(height: 20),
+              DropdownButton<String>(
+                value: selectedOption,
+                hint: Text('Select Option'),
+                items: <String>['Take Lift', 'Take Stairs'].map((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+                onChanged: (newValue) {
+                  setState(() {
+                    selectedOption = newValue;
+                  });
+                },
+              ),
+              SizedBox(height: 20),
+              if (selectedOption != null) // Check if an option is selected
+                Text('Distance to $selectedOption: ${selectedOption == 'Lift' ? distanceToLift.toStringAsFixed(2) : distanceToStairs.toStringAsFixed(2)} meters', style: TextStyle(fontSize: 20)),
+            ],
+          ),
         ),
       ),
     );
@@ -455,9 +476,6 @@ class _FloorTransitionPageState extends State<FloorTransitionPage> {
     super.dispose();
   }
 }
-
-
-
 //Emergency Page
 class EmergencyPage extends StatefulWidget {
   @override
@@ -465,7 +483,15 @@ class EmergencyPage extends StatefulWidget {
 }
 
 class _EmergencyPageState extends State<EmergencyPage> {
-  final String emergencyNumber = "999";  
+  final String emergencyNumber = "999";
+  String? selectedLocation;
+  Map<String, String> navigationInstructions = {
+    'Cafe': 'Exit the cafe, turn right and follow the hallway to the main entrance.',
+    '1F Toilet': 'Exit the toilet, turn left and go straight to the main entrance.',
+    'CE Lab': 'Leave the lab, take the stairs down to the ground floor and proceed to the main entrance.',
+    '2F Toilet': 'Go downstairs and the main entrance is right across the hall.'
+  };
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -476,17 +502,38 @@ class _EmergencyPageState extends State<EmergencyPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
-              'Leading you to the main entrance by taking stairs.',
+              'Leading you to the main entrance\n Please do not take the lift in emergency situations.',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               textAlign: TextAlign.center,
             ),
             SizedBox(height: 20),
-            ElevatedButton(
+            DropdownButton<String>(
+              value: selectedLocation,
+              hint: Text('Select Current Location'),
+              items: navigationInstructions.keys.map((String location) {
+                return DropdownMenuItem<String>(
+                  value: location,
+                  child: Text(location),
+                );
+              }).toList(),
+              onChanged: (newValue) {
+                setState(() {
+                  selectedLocation = newValue;
+                });
+              },
+            ),
+            SizedBox(height: 20),
+            if (selectedLocation != null) // Show navigation instructions if a location is selected
+              Text(navigationInstructions[selectedLocation] ?? "No instructions available.",
+                  style: TextStyle(fontSize: 16, color: Colors.black87)),
+            SizedBox(height: 20),
+            ElevatedButton.icon(
               onPressed: _makePhoneCall,
-              child: Text('Call Emergency', style: TextStyle(fontSize: 16)),
+              icon: Icon(Icons.phone, color: Colors.white),
+              label: Text('Call Emergency', style: TextStyle(fontSize: 16)),
               style: ElevatedButton.styleFrom(
-                primary: Colors.red,
-                onPrimary: Colors.white,
+                backgroundColor: Colors.red,
+                foregroundColor: Colors.white,
               ),
             ),
           ],

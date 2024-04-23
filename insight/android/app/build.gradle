@@ -24,8 +24,15 @@ if (flutterVersionName == null) {
 
 android {
     namespace "com.example.insight"
-    compileSdkVersion flutter.compileSdkVersion
-    ndkVersion flutter.ndkVersion
+    compileSdkVersion 34
+
+    defaultConfig {
+        // 确保其他设置如 applicationId, minSdkVersion, targetSdkVersion 等保持不变
+        minSdkVersion 16
+        targetSdkVersion 32
+        versionCode flutterVersionCode.toInteger()
+        versionName flutterVersionName
+    }
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
