@@ -7,9 +7,11 @@ import 'dart:async';
 import 'package:url_launcher/url_launcher.dart';
 import 'dart:math';
 import 'package:collection/collection.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 
 
 void main() => runApp(MyApp());
+Future<bool> isSdk30OrHigher() async {   AndroidDeviceInfo build = await DeviceInfoPlugin().androidInfo;   return build.version.sdkInt >= 30; }
 
 class MyApp extends StatelessWidget {
   @override
