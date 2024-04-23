@@ -23,8 +23,9 @@ jobs:
       - name: Set up JDK              # Setup JAVA to build the Android APK for us
         uses: actions/setup-java@v4
         with:
-           distribution: 'corretto' # See 'Supported distributions' for available options
           java-version: '21'
+          distribution: 'temurin' # See 'Supported distributions' for available options
+          
 
       #  Decode keystore File from repository secrets
       #  Keep the keystore file private; don't check it into public source control!
