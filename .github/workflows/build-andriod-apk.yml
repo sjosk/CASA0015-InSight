@@ -82,7 +82,7 @@ jobs:
       - name: Create Github Release
         uses: ncipollo/release-action@v1
         with:
-          artifacts: "build/app/outputs/bundle/release/app-release.aab,build/app/outputs/flutter-apk/app-release.apk"
+          artifacts: "weatherapp/build/app/outputs/bundle/release/app-release.aab,weatherapp/build/app/outputs/flutter-apk/app-release.apk"
           tag: "v${{ steps.get_flutter_app_version.outputs.TAG_VERSION }}"
           skipIfReleaseExists: true
           token: ${{ secrets.GITHUB_TOKEN }}
