@@ -4,7 +4,7 @@
 ![image](https://github.com/zczqxc5/casa0015-mobile-assessment/assets/146037962/69e7a35b-3c69-44e2-a63c-d7b1b99dc97a)
 
 ## landingpage
-[https://weathermate-gamma-xikd6ug.gamma.site/  ](https://zczqxc5.github.io/casa0015-mobile-assessment/landing_page/gesapp)
+https://zczqxc5.github.io/casa0015-mobile-assessment/landing_page/gesapp/
 
 ## Video Instruction
 https://youtu.be/XrG7FGl-_2E
