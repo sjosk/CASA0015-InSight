@@ -84,7 +84,7 @@ jobs:
         with:
           artifacts: "weatherapp/build/app/outputs/bundle/release/app-release.aab,weatherapp/build/app/outputs/flutter-apk/app-release.apk"
           tag: "v${{ steps.get_flutter_app_version.outputs.TAG_VERSION }}"
-          skipIfReleaseExists: true
+          skipIfReleaseExists: false
           token: ${{ secrets.GITHUB_TOKEN }}
 
 
