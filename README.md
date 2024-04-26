@@ -30,7 +30,7 @@ The app incorporates external libraries such as Flutter Beacon for beacon intera
 
 # 📍 Get started with InSight  
 ## Guidance  
-- Download the InSight from [here](https://github.com/sjosk/CASA0015-InSight/tree/main/insight)
+- Download the InSight from [here](https://github.com/sjosk/CASA0015-InSight/blob/main/insight/build0/app/outputs/flutter-apk/app-release.apk) (Android)
 - Deploy and run InSight on any simulator or iOS/Andriod devices
 - Before using the app, please remember to authorize the app to use your location, microphone, and phone functions.
 
