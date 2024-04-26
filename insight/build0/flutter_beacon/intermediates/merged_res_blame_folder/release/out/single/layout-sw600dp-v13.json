@@ -1,0 +1,10 @@
+[
+    {
+        "merged": "com.flutterbeacon.flutter_beacon-merged_res-20:/layout-sw600dp-v13/design_layout_snackbar.xml",
+        "source": "com.flutterbeacon.flutter_beacon-material-1.3.0-3:/layout-sw600dp-v13/design_layout_snackbar.xml"
+    },
+    {
+        "merged": "com.flutterbeacon.flutter_beacon-merged_res-20:/layout-sw600dp-v13/mtrl_layout_snackbar.xml",
+        "source": "com.flutterbeacon.flutter_beacon-material-1.3.0-3:/layout-sw600dp-v13/mtrl_layout_snackbar.xml"
+    }
+]

@@ -1,0 +1,227 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="com.example.insightn"
+4    android:versionCode="1"
+5    android:versionName="1.0.0" >
+6
+7    <uses-sdk
+8        android:minSdkVersion="21"
+8-->/Users/41v10/Documents/GitHub/CASA0015-InSight/insight/android/app/src/main/AndroidManifest.xml
+9        android:targetSdkVersion="33" />
+9-->/Users/41v10/Documents/GitHub/CASA0015-InSight/insight/android/app/src/main/AndroidManifest.xml
+10    <!--
+11         Required to query activities that can process text, see:
+12         https://developer.android.com/training/package-visibility?hl=en and
+13         https://developer.android.com/reference/android/content/Intent#ACTION_PROCESS_TEXT.
+14
+15         In particular, this is used by the Flutter engine in io.flutter.plugin.text.ProcessTextPlugin.
+16    -->
+17    <queries>
+17-->/Users/41v10/Documents/GitHub/CASA0015-InSight/insight/android/app/src/main/AndroidManifest.xml:38:5-43:15
+18        <intent>
+18-->/Users/41v10/Documents/GitHub/CASA0015-InSight/insight/android/app/src/main/AndroidManifest.xml:39:9-42:18
+19            <action android:name="android.intent.action.PROCESS_TEXT" />
+19-->/Users/41v10/Documents/GitHub/CASA0015-InSight/insight/android/app/src/main/AndroidManifest.xml:40:13-72
+19-->/Users/41v10/Documents/GitHub/CASA0015-InSight/insight/android/app/src/main/AndroidManifest.xml:40:21-70
+20
+21            <data android:mimeType="text/plain" />
+21-->/Users/41v10/Documents/GitHub/CASA0015-InSight/insight/android/app/src/main/AndroidManifest.xml:41:13-50
+21-->/Users/41v10/Documents/GitHub/CASA0015-InSight/insight/android/app/src/main/AndroidManifest.xml:41:19-48
+22        </intent>
+23    </queries>
+24
+25    <uses-permission android:name="android.permission.VIBRATE" />
+25-->[:vibration] /Users/41v10/Documents/GitHub/CASA0015-InSight/insight/build/vibration/intermediates/merged_manifest/release/AndroidManifest.xml:9:5-66
+25-->[:vibration] /Users/41v10/Documents/GitHub/CASA0015-InSight/insight/build/vibration/intermediates/merged_manifest/release/AndroidManifest.xml:9:22-63
+26    <uses-permission
+26-->[org.altbeacon:android-beacon-library:2.19] /Users/41v10/.gradle/caches/transforms-3/0e8ef5a4ad7e502ddc19df3d0662da59/transformed/jetified-android-beacon-library-2.19/AndroidManifest.xml:10:5-12:36
+27        android:name="android.permission.BLUETOOTH"
+27-->[org.altbeacon:android-beacon-library:2.19] /Users/41v10/.gradle/caches/transforms-3/0e8ef5a4ad7e502ddc19df3d0662da59/transformed/jetified-android-beacon-library-2.19/AndroidManifest.xml:11:9-52
+28        android:required="false" />
+28-->[org.altbeacon:android-beacon-library:2.19] /Users/41v10/.gradle/caches/transforms-3/0e8ef5a4ad7e502ddc19df3d0662da59/transformed/jetified-android-beacon-library-2.19/AndroidManifest.xml:12:9-33
+29    <uses-permission
+29-->[org.altbeacon:android-beacon-library:2.19] /Users/41v10/.gradle/caches/transforms-3/0e8ef5a4ad7e502ddc19df3d0662da59/transformed/jetified-android-beacon-library-2.19/AndroidManifest.xml:13:5-15:36
+30        android:name="android.permission.BLUETOOTH_ADMIN"
+30-->[org.altbeacon:android-beacon-library:2.19] /Users/41v10/.gradle/caches/transforms-3/0e8ef5a4ad7e502ddc19df3d0662da59/transformed/jetified-android-beacon-library-2.19/AndroidManifest.xml:14:9-58
+31        android:required="false" />
+31-->[org.altbeacon:android-beacon-library:2.19] /Users/41v10/.gradle/caches/transforms-3/0e8ef5a4ad7e502ddc19df3d0662da59/transformed/jetified-android-beacon-library-2.19/AndroidManifest.xml:15:9-33
+32    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+32-->[org.altbeacon:android-beacon-library:2.19] /Users/41v10/.gradle/caches/transforms-3/0e8ef5a4ad7e502ddc19df3d0662da59/transformed/jetified-android-beacon-library-2.19/AndroidManifest.xml:16:5-81
+32-->[org.altbeacon:android-beacon-library:2.19] /Users/41v10/.gradle/caches/transforms-3/0e8ef5a4ad7e502ddc19df3d0662da59/transformed/jetified-android-beacon-library-2.19/AndroidManifest.xml:16:22-78
+33    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+33-->[org.altbeacon:android-beacon-library:2.19] /Users/41v10/.gradle/caches/transforms-3/0e8ef5a4ad7e502ddc19df3d0662da59/transformed/jetified-android-beacon-library-2.19/AndroidManifest.xml:17:5-81
+33-->[org.altbeacon:android-beacon-library:2.19] /Users/41v10/.gradle/caches/transforms-3/0e8ef5a4ad7e502ddc19df3d0662da59/transformed/jetified-android-beacon-library-2.19/AndroidManifest.xml:17:22-78
+34
+35    <permission
+35-->[androidx.core:core:1.10.1] /Users/41v10/.gradle/caches/transforms-3/0b9c903fef8d2eb2a269c36999ef4a74/transformed/core-1.10.1/AndroidManifest.xml:22:5-24:47
+36        android:name="com.example.insightn.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+36-->[androidx.core:core:1.10.1] /Users/41v10/.gradle/caches/transforms-3/0b9c903fef8d2eb2a269c36999ef4a74/transformed/core-1.10.1/AndroidManifest.xml:23:9-81
+37        android:protectionLevel="signature" />
+37-->[androidx.core:core:1.10.1] /Users/41v10/.gradle/caches/transforms-3/0b9c903fef8d2eb2a269c36999ef4a74/transformed/core-1.10.1/AndroidManifest.xml:24:9-44
+38
+39    <uses-permission android:name="com.example.insightn.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
+39-->[androidx.core:core:1.10.1] /Users/41v10/.gradle/caches/transforms-3/0b9c903fef8d2eb2a269c36999ef4a74/transformed/core-1.10.1/AndroidManifest.xml:26:5-97
+39-->[androidx.core:core:1.10.1] /Users/41v10/.gradle/caches/transforms-3/0b9c903fef8d2eb2a269c36999ef4a74/transformed/core-1.10.1/AndroidManifest.xml:26:22-94
+40
+41    <application
+42        android:name="android.app.Application"
+42-->/Users/41v10/Documents/GitHub/CASA0015-InSight/insight/android/app/src/main/AndroidManifest.xml:4:9-42
+43        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+43-->[androidx.core:core:1.10.1] /Users/41v10/.gradle/caches/transforms-3/0b9c903fef8d2eb2a269c36999ef4a74/transformed/core-1.10.1/AndroidManifest.xml:28:18-86
+44        android:icon="@mipmap/ic_launcher"
+44-->/Users/41v10/Documents/GitHub/CASA0015-InSight/insight/android/app/src/main/AndroidManifest.xml:5:9-43
+45        android:label="insightn" >
+45-->/Users/41v10/Documents/GitHub/CASA0015-InSight/insight/android/app/src/main/AndroidManifest.xml:3:9-33
+46        <activity
+46-->/Users/41v10/Documents/GitHub/CASA0015-InSight/insight/android/app/src/main/AndroidManifest.xml:6:9-26:20
+47            android:name="com.example.insightn.MainActivity"
+47-->/Users/41v10/Documents/GitHub/CASA0015-InSight/insight/android/app/src/main/AndroidManifest.xml:7:13-41
+48            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
+48-->/Users/41v10/Documents/GitHub/CASA0015-InSight/insight/android/app/src/main/AndroidManifest.xml:11:13-163
+49            android:exported="true"
+49-->/Users/41v10/Documents/GitHub/CASA0015-InSight/insight/android/app/src/main/AndroidManifest.xml:8:13-36
+50            android:hardwareAccelerated="true"
+50-->/Users/41v10/Documents/GitHub/CASA0015-InSight/insight/android/app/src/main/AndroidManifest.xml:12:13-47
+51            android:launchMode="singleTop"
+51-->/Users/41v10/Documents/GitHub/CASA0015-InSight/insight/android/app/src/main/AndroidManifest.xml:9:13-43
+52            android:theme="@style/LaunchTheme"
+52-->/Users/41v10/Documents/GitHub/CASA0015-InSight/insight/android/app/src/main/AndroidManifest.xml:10:13-47
+53            android:windowSoftInputMode="adjustResize" >
+53-->/Users/41v10/Documents/GitHub/CASA0015-InSight/insight/android/app/src/main/AndroidManifest.xml:13:13-55
+54
+55            <!--
+56                 Specifies an Android theme to apply to this Activity as soon as
+57                 the Android process has started. This theme is visible to the user
+58                 while the Flutter UI initializes. After that, this theme continues
+59                 to determine the Window background behind the Flutter UI.
+60            -->
+61            <meta-data
+61-->/Users/41v10/Documents/GitHub/CASA0015-InSight/insight/android/app/src/main/AndroidManifest.xml:18:13-21:17
+62                android:name="io.flutter.embedding.android.NormalTheme"
+62-->/Users/41v10/Documents/GitHub/CASA0015-InSight/insight/android/app/src/main/AndroidManifest.xml:19:15-70
+63                android:resource="@style/NormalTheme" />
+63-->/Users/41v10/Documents/GitHub/CASA0015-InSight/insight/android/app/src/main/AndroidManifest.xml:20:15-52
+64
+65            <intent-filter>
+65-->/Users/41v10/Documents/GitHub/CASA0015-InSight/insight/android/app/src/main/AndroidManifest.xml:22:13-25:29
+66                <action android:name="android.intent.action.MAIN" />
+66-->/Users/41v10/Documents/GitHub/CASA0015-InSight/insight/android/app/src/main/AndroidManifest.xml:23:17-68
+66-->/Users/41v10/Documents/GitHub/CASA0015-InSight/insight/android/app/src/main/AndroidManifest.xml:23:25-66
+67
+68                <category android:name="android.intent.category.LAUNCHER" />
+68-->/Users/41v10/Documents/GitHub/CASA0015-InSight/insight/android/app/src/main/AndroidManifest.xml:24:17-76
+68-->/Users/41v10/Documents/GitHub/CASA0015-InSight/insight/android/app/src/main/AndroidManifest.xml:24:27-74
+69            </intent-filter>
+70        </activity>
+71        <!--
+72             Don't delete the meta-data below.
+73             This is used by the Flutter tool to generate GeneratedPluginRegistrant.java
+74        -->
+75        <meta-data
+75-->/Users/41v10/Documents/GitHub/CASA0015-InSight/insight/android/app/src/main/AndroidManifest.xml:29:9-31:33
+76            android:name="flutterEmbedding"
+76-->/Users/41v10/Documents/GitHub/CASA0015-InSight/insight/android/app/src/main/AndroidManifest.xml:30:13-44
+77            android:value="2" />
+77-->/Users/41v10/Documents/GitHub/CASA0015-InSight/insight/android/app/src/main/AndroidManifest.xml:31:13-30
+78
+79        <activity
+79-->[:url_launcher_android] /Users/41v10/Documents/GitHub/CASA0015-InSight/insight/build/url_launcher_android/intermediates/merged_manifest/release/AndroidManifest.xml:10:9-13:74
+80            android:name="io.flutter.plugins.urllauncher.WebViewActivity"
+80-->[:url_launcher_android] /Users/41v10/Documents/GitHub/CASA0015-InSight/insight/build/url_launcher_android/intermediates/merged_manifest/release/AndroidManifest.xml:11:13-74
+81            android:exported="false"
+81-->[:url_launcher_android] /Users/41v10/Documents/GitHub/CASA0015-InSight/insight/build/url_launcher_android/intermediates/merged_manifest/release/AndroidManifest.xml:12:13-37
+82            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
+82-->[:url_launcher_android] /Users/41v10/Documents/GitHub/CASA0015-InSight/insight/build/url_launcher_android/intermediates/merged_manifest/release/AndroidManifest.xml:13:13-71
+83
+84        <uses-library
+84-->[androidx.window:window:1.0.0-beta04] /Users/41v10/.gradle/caches/transforms-3/032f4dff274e516110d9363a9793a3e3/transformed/jetified-window-1.0.0-beta04/AndroidManifest.xml:25:9-27:40
+85            android:name="androidx.window.extensions"
+85-->[androidx.window:window:1.0.0-beta04] /Users/41v10/.gradle/caches/transforms-3/032f4dff274e516110d9363a9793a3e3/transformed/jetified-window-1.0.0-beta04/AndroidManifest.xml:26:13-54
+86            android:required="false" />
+86-->[androidx.window:window:1.0.0-beta04] /Users/41v10/.gradle/caches/transforms-3/032f4dff274e516110d9363a9793a3e3/transformed/jetified-window-1.0.0-beta04/AndroidManifest.xml:27:13-37
+87        <uses-library
+87-->[androidx.window:window:1.0.0-beta04] /Users/41v10/.gradle/caches/transforms-3/032f4dff274e516110d9363a9793a3e3/transformed/jetified-window-1.0.0-beta04/AndroidManifest.xml:28:9-30:40
+88            android:name="androidx.window.sidecar"
+88-->[androidx.window:window:1.0.0-beta04] /Users/41v10/.gradle/caches/transforms-3/032f4dff274e516110d9363a9793a3e3/transformed/jetified-window-1.0.0-beta04/AndroidManifest.xml:29:13-51
+89            android:required="false" />
+89-->[androidx.window:window:1.0.0-beta04] /Users/41v10/.gradle/caches/transforms-3/032f4dff274e516110d9363a9793a3e3/transformed/jetified-window-1.0.0-beta04/AndroidManifest.xml:30:13-37
+90
+91        <receiver
+91-->[org.altbeacon:android-beacon-library:2.19] /Users/41v10/.gradle/caches/transforms-3/0e8ef5a4ad7e502ddc19df3d0662da59/transformed/jetified-android-beacon-library-2.19/AndroidManifest.xml:20:9-28:20
+92            android:name="org.altbeacon.beacon.startup.StartupBroadcastReceiver"
+92-->[org.altbeacon:android-beacon-library:2.19] /Users/41v10/.gradle/caches/transforms-3/0e8ef5a4ad7e502ddc19df3d0662da59/transformed/jetified-android-beacon-library-2.19/AndroidManifest.xml:21:13-81
+93            android:exported="false" >
+93-->[org.altbeacon:android-beacon-library:2.19] /Users/41v10/.gradle/caches/transforms-3/0e8ef5a4ad7e502ddc19df3d0662da59/transformed/jetified-android-beacon-library-2.19/AndroidManifest.xml:22:13-37
+94            <intent-filter>
+94-->[org.altbeacon:android-beacon-library:2.19] /Users/41v10/.gradle/caches/transforms-3/0e8ef5a4ad7e502ddc19df3d0662da59/transformed/jetified-android-beacon-library-2.19/AndroidManifest.xml:23:13-27:29
+95                <action android:name="android.intent.action.BOOT_COMPLETED" />
+95-->[org.altbeacon:android-beacon-library:2.19] /Users/41v10/.gradle/caches/transforms-3/0e8ef5a4ad7e502ddc19df3d0662da59/transformed/jetified-android-beacon-library-2.19/AndroidManifest.xml:24:17-79
+95-->[org.altbeacon:android-beacon-library:2.19] /Users/41v10/.gradle/caches/transforms-3/0e8ef5a4ad7e502ddc19df3d0662da59/transformed/jetified-android-beacon-library-2.19/AndroidManifest.xml:24:25-76
+96                <action android:name="android.intent.action.ACTION_POWER_CONNECTED" />
+96-->[org.altbeacon:android-beacon-library:2.19] /Users/41v10/.gradle/caches/transforms-3/0e8ef5a4ad7e502ddc19df3d0662da59/transformed/jetified-android-beacon-library-2.19/AndroidManifest.xml:25:17-87
+96-->[org.altbeacon:android-beacon-library:2.19] /Users/41v10/.gradle/caches/transforms-3/0e8ef5a4ad7e502ddc19df3d0662da59/transformed/jetified-android-beacon-library-2.19/AndroidManifest.xml:25:25-84
+97                <action android:name="android.intent.action.ACTION_POWER_DISCONNECTED" />
+97-->[org.altbeacon:android-beacon-library:2.19] /Users/41v10/.gradle/caches/transforms-3/0e8ef5a4ad7e502ddc19df3d0662da59/transformed/jetified-android-beacon-library-2.19/AndroidManifest.xml:26:17-90
+97-->[org.altbeacon:android-beacon-library:2.19] /Users/41v10/.gradle/caches/transforms-3/0e8ef5a4ad7e502ddc19df3d0662da59/transformed/jetified-android-beacon-library-2.19/AndroidManifest.xml:26:25-87
+98            </intent-filter>
+99        </receiver>
+100
+101        <service
+101-->[org.altbeacon:android-beacon-library:2.19] /Users/41v10/.gradle/caches/transforms-3/0e8ef5a4ad7e502ddc19df3d0662da59/transformed/jetified-android-beacon-library-2.19/AndroidManifest.xml:30:9-35:38
+102            android:name="org.altbeacon.beacon.service.BeaconService"
+102-->[org.altbeacon:android-beacon-library:2.19] /Users/41v10/.gradle/caches/transforms-3/0e8ef5a4ad7e502ddc19df3d0662da59/transformed/jetified-android-beacon-library-2.19/AndroidManifest.xml:31:13-70
+103            android:enabled="true"
+103-->[org.altbeacon:android-beacon-library:2.19] /Users/41v10/.gradle/caches/transforms-3/0e8ef5a4ad7e502ddc19df3d0662da59/transformed/jetified-android-beacon-library-2.19/AndroidManifest.xml:32:13-35
+104            android:exported="false"
+104-->[org.altbeacon:android-beacon-library:2.19] /Users/41v10/.gradle/caches/transforms-3/0e8ef5a4ad7e502ddc19df3d0662da59/transformed/jetified-android-beacon-library-2.19/AndroidManifest.xml:33:13-37
+105            android:isolatedProcess="false"
+105-->[org.altbeacon:android-beacon-library:2.19] /Users/41v10/.gradle/caches/transforms-3/0e8ef5a4ad7e502ddc19df3d0662da59/transformed/jetified-android-beacon-library-2.19/AndroidManifest.xml:34:13-44
+106            android:label="beacon" />
+106-->[org.altbeacon:android-beacon-library:2.19] /Users/41v10/.gradle/caches/transforms-3/0e8ef5a4ad7e502ddc19df3d0662da59/transformed/jetified-android-beacon-library-2.19/AndroidManifest.xml:35:13-35
+107        <service
+107-->[org.altbeacon:android-beacon-library:2.19] /Users/41v10/.gradle/caches/transforms-3/0e8ef5a4ad7e502ddc19df3d0662da59/transformed/jetified-android-beacon-library-2.19/AndroidManifest.xml:36:9-39:40
+108            android:name="org.altbeacon.beacon.BeaconIntentProcessor"
+108-->[org.altbeacon:android-beacon-library:2.19] /Users/41v10/.gradle/caches/transforms-3/0e8ef5a4ad7e502ddc19df3d0662da59/transformed/jetified-android-beacon-library-2.19/AndroidManifest.xml:37:13-70
+109            android:enabled="true"
+109-->[org.altbeacon:android-beacon-library:2.19] /Users/41v10/.gradle/caches/transforms-3/0e8ef5a4ad7e502ddc19df3d0662da59/transformed/jetified-android-beacon-library-2.19/AndroidManifest.xml:38:13-35
+110            android:exported="false" />
+110-->[org.altbeacon:android-beacon-library:2.19] /Users/41v10/.gradle/caches/transforms-3/0e8ef5a4ad7e502ddc19df3d0662da59/transformed/jetified-android-beacon-library-2.19/AndroidManifest.xml:39:13-37
+111        <service
+111-->[org.altbeacon:android-beacon-library:2.19] /Users/41v10/.gradle/caches/transforms-3/0e8ef5a4ad7e502ddc19df3d0662da59/transformed/jetified-android-beacon-library-2.19/AndroidManifest.xml:40:9-50:19
+112            android:name="org.altbeacon.beacon.service.ScanJob"
+112-->[org.altbeacon:android-beacon-library:2.19] /Users/41v10/.gradle/caches/transforms-3/0e8ef5a4ad7e502ddc19df3d0662da59/transformed/jetified-android-beacon-library-2.19/AndroidManifest.xml:41:13-64
+113            android:exported="false"
+113-->[org.altbeacon:android-beacon-library:2.19] /Users/41v10/.gradle/caches/transforms-3/0e8ef5a4ad7e502ddc19df3d0662da59/transformed/jetified-android-beacon-library-2.19/AndroidManifest.xml:42:13-37
+114            android:permission="android.permission.BIND_JOB_SERVICE" >
+114-->[org.altbeacon:android-beacon-library:2.19] /Users/41v10/.gradle/caches/transforms-3/0e8ef5a4ad7e502ddc19df3d0662da59/transformed/jetified-android-beacon-library-2.19/AndroidManifest.xml:43:13-69
+115            <meta-data
+115-->[org.altbeacon:android-beacon-library:2.19] /Users/41v10/.gradle/caches/transforms-3/0e8ef5a4ad7e502ddc19df3d0662da59/transformed/jetified-android-beacon-library-2.19/AndroidManifest.xml:44:13-46:45
+116                android:name="immediateScanJobId"
+116-->[org.altbeacon:android-beacon-library:2.19] /Users/41v10/.gradle/caches/transforms-3/0e8ef5a4ad7e502ddc19df3d0662da59/transformed/jetified-android-beacon-library-2.19/AndroidManifest.xml:45:17-50
+117                android:value="208352939" />
+117-->[org.altbeacon:android-beacon-library:2.19] /Users/41v10/.gradle/caches/transforms-3/0e8ef5a4ad7e502ddc19df3d0662da59/transformed/jetified-android-beacon-library-2.19/AndroidManifest.xml:46:17-42
+118            <meta-data
+118-->[org.altbeacon:android-beacon-library:2.19] /Users/41v10/.gradle/caches/transforms-3/0e8ef5a4ad7e502ddc19df3d0662da59/transformed/jetified-android-beacon-library-2.19/AndroidManifest.xml:47:13-49:45
+119                android:name="periodicScanJobId"
+119-->[org.altbeacon:android-beacon-library:2.19] /Users/41v10/.gradle/caches/transforms-3/0e8ef5a4ad7e502ddc19df3d0662da59/transformed/jetified-android-beacon-library-2.19/AndroidManifest.xml:48:17-49
+120                android:value="208352940" />
+120-->[org.altbeacon:android-beacon-library:2.19] /Users/41v10/.gradle/caches/transforms-3/0e8ef5a4ad7e502ddc19df3d0662da59/transformed/jetified-android-beacon-library-2.19/AndroidManifest.xml:49:17-42
+121        </service>
+122        <service
+122-->[org.altbeacon:android-beacon-library:2.19] /Users/41v10/.gradle/caches/transforms-3/0e8ef5a4ad7e502ddc19df3d0662da59/transformed/jetified-android-beacon-library-2.19/AndroidManifest.xml:51:9-58:19
+123            android:name="org.altbeacon.bluetooth.BluetoothTestJob"
+123-->[org.altbeacon:android-beacon-library:2.19] /Users/41v10/.gradle/caches/transforms-3/0e8ef5a4ad7e502ddc19df3d0662da59/transformed/jetified-android-beacon-library-2.19/AndroidManifest.xml:52:13-68
+124            android:exported="false"
+124-->[org.altbeacon:android-beacon-library:2.19] /Users/41v10/.gradle/caches/transforms-3/0e8ef5a4ad7e502ddc19df3d0662da59/transformed/jetified-android-beacon-library-2.19/AndroidManifest.xml:53:13-37
+125            android:permission="android.permission.BIND_JOB_SERVICE" >
+125-->[org.altbeacon:android-beacon-library:2.19] /Users/41v10/.gradle/caches/transforms-3/0e8ef5a4ad7e502ddc19df3d0662da59/transformed/jetified-android-beacon-library-2.19/AndroidManifest.xml:54:13-69
+126            <meta-data
+126-->[org.altbeacon:android-beacon-library:2.19] /Users/41v10/.gradle/caches/transforms-3/0e8ef5a4ad7e502ddc19df3d0662da59/transformed/jetified-android-beacon-library-2.19/AndroidManifest.xml:55:13-57:46
+127                android:name="jobId"
+127-->[org.altbeacon:android-beacon-library:2.19] /Users/41v10/.gradle/caches/transforms-3/0e8ef5a4ad7e502ddc19df3d0662da59/transformed/jetified-android-beacon-library-2.19/AndroidManifest.xml:56:17-37
+128                android:value="1799803768" />
+128-->[org.altbeacon:android-beacon-library:2.19] /Users/41v10/.gradle/caches/transforms-3/0e8ef5a4ad7e502ddc19df3d0662da59/transformed/jetified-android-beacon-library-2.19/AndroidManifest.xml:57:17-43
+129        </service>
+130    </application>
+131
+132</manifest>

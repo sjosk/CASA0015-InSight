@@ -1,0 +1,6 @@
+framework module flutter_beacon {
+  umbrella header "flutter_beacon-umbrella.h"
+
+  export *
+  module * { export * }
+}

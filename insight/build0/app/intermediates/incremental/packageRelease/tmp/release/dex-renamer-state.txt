@@ -1,0 +1,4 @@
+#Fri Apr 26 16:31:23 BST 2024
+base.0=/Users/41v10/Documents/GitHub/CASA0015-InSight/insight/build/app/intermediates/dex/release/minifyReleaseWithR8/classes.dex
+path.0=classes.dex
+renamed.0=classes.dex

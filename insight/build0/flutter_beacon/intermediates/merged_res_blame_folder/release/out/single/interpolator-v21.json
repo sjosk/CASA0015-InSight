@@ -1,0 +1,14 @@
+[
+    {
+        "merged": "com.flutterbeacon.flutter_beacon-merged_res-20:/interpolator-v21/mtrl_fast_out_slow_in.xml",
+        "source": "com.flutterbeacon.flutter_beacon-material-1.3.0-3:/interpolator-v21/mtrl_fast_out_slow_in.xml"
+    },
+    {
+        "merged": "com.flutterbeacon.flutter_beacon-merged_res-20:/interpolator-v21/mtrl_linear_out_slow_in.xml",
+        "source": "com.flutterbeacon.flutter_beacon-material-1.3.0-3:/interpolator-v21/mtrl_linear_out_slow_in.xml"
+    },
+    {
+        "merged": "com.flutterbeacon.flutter_beacon-merged_res-20:/interpolator-v21/mtrl_fast_out_linear_in.xml",
+        "source": "com.flutterbeacon.flutter_beacon-material-1.3.0-3:/interpolator-v21/mtrl_fast_out_linear_in.xml"
+    }
+]

@@ -1,0 +1,12 @@
+com.csdcorp.speech_to_text-jetified-window-1.0.0-beta04-0 /Users/41v10/.gradle/caches/transforms-3/032f4dff274e516110d9363a9793a3e3/transformed/jetified-window-1.0.0-beta04/res
+com.csdcorp.speech_to_text-jetified-window-java-1.0.0-beta04-1 /Users/41v10/.gradle/caches/transforms-3/142c24f2530665bb6deb4123ab140714/transformed/jetified-window-java-1.0.0-beta04/res
+com.csdcorp.speech_to_text-core-1.6.0-2 /Users/41v10/.gradle/caches/transforms-3/2579a7de00054bf46a8dbc332552f622/transformed/core-1.6.0/res
+com.csdcorp.speech_to_text-jetified-annotation-experimental-1.1.0-3 /Users/41v10/.gradle/caches/transforms-3/3f96ca76068ab400b494bc7d541ee256/transformed/jetified-annotation-experimental-1.1.0/res
+com.csdcorp.speech_to_text-main-4 /Users/41v10/.pub-cache/hosted/pub.dev/speech_to_text-6.6.1/android/src/main/res
+com.csdcorp.speech_to_text-release-5 /Users/41v10/.pub-cache/hosted/pub.dev/speech_to_text-6.6.1/android/src/release/res
+com.csdcorp.speech_to_text-pngs-6 /Users/41v10/Documents/GitHub/CASA0015-InSight/insight/build/speech_to_text/generated/res/pngs/release
+com.csdcorp.speech_to_text-resValues-7 /Users/41v10/Documents/GitHub/CASA0015-InSight/insight/build/speech_to_text/generated/res/resValues/release
+com.csdcorp.speech_to_text-rs-8 /Users/41v10/Documents/GitHub/CASA0015-InSight/insight/build/speech_to_text/generated/res/rs/release
+com.csdcorp.speech_to_text-mergeReleaseResources-9 /Users/41v10/Documents/GitHub/CASA0015-InSight/insight/build/speech_to_text/intermediates/incremental/release/mergeReleaseResources/merged.dir
+com.csdcorp.speech_to_text-mergeReleaseResources-10 /Users/41v10/Documents/GitHub/CASA0015-InSight/insight/build/speech_to_text/intermediates/incremental/release/mergeReleaseResources/stripped.dir
+com.csdcorp.speech_to_text-merged_res-11 /Users/41v10/Documents/GitHub/CASA0015-InSight/insight/build/speech_to_text/intermediates/merged_res/release

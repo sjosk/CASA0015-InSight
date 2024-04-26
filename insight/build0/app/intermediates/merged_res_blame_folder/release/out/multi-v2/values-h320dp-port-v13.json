@@ -1,0 +1,19 @@
+{
+    "logs": [
+        {
+            "outputFile": "com.example.insightn.app-mergeReleaseResources-22:/values-h320dp-port-v13/values-h320dp-port-v13.xml",
+            "map": [
+                {
+                    "source": "/Users/41v10/.gradle/caches/transforms-3/189cdb2f713486de02ee1809192d26f7/transformed/material-1.3.0/res/values-h320dp-port-v13/values-h320dp-port-v13.xml",
+                    "from": {
+                        "startLines": "2,3",
+                        "startColumns": "4,4",
+                        "startOffsets": "55,107",
+                        "endColumns": "51,75",
+                        "endOffsets": "102,178"
+                    }
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,10 @@
+[
+    {
+        "merged": "com.flutterbeacon.flutter_beacon-merged_res-20:/layout-watch-v20/abc_alert_dialog_button_bar_material.xml",
+        "source": "com.flutterbeacon.flutter_beacon-appcompat-1.2.0-11:/layout-watch-v20/abc_alert_dialog_button_bar_material.xml"
+    },
+    {
+        "merged": "com.flutterbeacon.flutter_beacon-merged_res-20:/layout-watch-v20/abc_alert_dialog_title_material.xml",
+        "source": "com.flutterbeacon.flutter_beacon-appcompat-1.2.0-11:/layout-watch-v20/abc_alert_dialog_title_material.xml"
+    }
+]
