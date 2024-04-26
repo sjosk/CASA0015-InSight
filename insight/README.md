@@ -1,4 +1,4 @@
-# insight
+# insightn
 
 A new Flutter project.
 
