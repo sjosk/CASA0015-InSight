@@ -6,10 +6,6 @@ on:
     # tags:
     # - "v*.*.*"          # In this case when you tag your commit with v1.0.0 for example
 
-defaults:  
-  run:
-    working-directory: ./insight
-
 jobs:
   build:
     runs-on: ubuntu-latest  # This is the type of machine we want to run the action on
@@ -19,16 +15,18 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3     # Checkout the Repository on the Virtual Machine
-
-      - name: Set up JDK 17
+      
+      - name: Navigate to insight directory
+        run: cd insight
+      
+      - name: Set up JDK              # Setup JAVA to build the Android APK for us
         uses: actions/setup-java@v3
         with:
-          java-version: '17'
-          distribution: 'temurin' 
-          
+          java-version: '11'
+          distribution: microsoft
 
       #  Decode keystore File from repository secrets
-      #  Keep the keystore file private; don't check it into public source control!
+      #  Keep the keystore file private; don’t check it into public source control!
       
       #- name: Decode KeyStore File (.jks)            
       #  run: echo "${{ secrets.KEYSTORE_JKS_PROD }}" | base64 --decode > android/keystore.jks
@@ -42,45 +40,54 @@ jobs:
       - name: Get pubspec version
         id: get_flutter_app_version
         run: |
-          VERSION=$(yq .version | grep -Eo '[0-9]+\.[0-9]+\.[0-9]+' pubspec.yaml | head -n 1)
-          echo "TAG_VERSION=$VERSION" >> $GITHUB_OUTPUT
+          VERSION=$(yq e '.version' insight/pubspec.yaml | grep -Eo '[0-9]+\.[0-9]+\.[0-9]+\+[0-9]+')
+          echo "TAG_VERSION=${VERSION%%+*}" >> $GITHUB_ENV
+          echo "::set-output name=TAG_VERSION::${VERSION%%+*}"
+      
   
       - name: Create git tag
         run: |
           git tag "v${{ steps.get_flutter_app_version.outputs.TAG_VERSION }}"
-
+          git push origin "v${{ steps.get_flutter_app_version.outputs.TAG_VERSION }}"
+        
       - name: Install Flutter               # Install Flutter
         uses: subosito/flutter-action@v2
         with:
           channel: 'main'
 
       - name: Get Flutter dependencies      # Get the Libraries and Dependencies
-        run: flutter pub get
+        run: |
+          cd insight
+          flutter pub get
 
       - name: Build APK Release             # Build a release
-        run: flutter build apk --release
+        run: |
+          cd insight
+          flutter build apk --release
 
       - name: Build an AppBundle            # App Bundles are useful for Google Play Store
-        run: flutter build appbundle --release
+        run: |
+          cd insight
+          flutter build appbundle --release
 
       - name: Save APK to Artifacts
         uses: actions/upload-artifact@v3
         with:
           name: flutter-apk
-          path: build/app/outputs/flutter-apk/*.apk
+          path: insight/build/app/outputs/flutter-apk/*.apk
 
       - name: Save APPBUNDLE to Artifacts
         uses: actions/upload-artifact@v2
         with:
           name: flutter-appbundle
-          path: build/app/outputs/bundle/release/*.aab
+          path: insight/build/app/outputs/bundle/release/*.aab
 
       - name: Create Github Release
         uses: ncipollo/release-action@v1
         with:
-          artifacts: "build/app/outputs/bundle/release/*.aab,build/app/outputs/flutter-apk/*.apk"
+          artifacts: "insight/build/app/outputs/bundle/release/*.aab,insight/build/app/outputs/flutter-apk/*.apk"
           tag: "v${{ steps.get_flutter_app_version.outputs.TAG_VERSION }}"
-          # token: ${{ secrets.PERSONAL_RELEASE_TOKEN }}
+        
 
   # TODO:  Upload to Firebase - for App Distribution
   # Release job, upload the apk or aab to Firebase App Distribution
@@ -108,4 +115,4 @@ jobs:
   #       groups: android-developers
   #       file: ${{secrets.APP_NAME}}.apk
   #  OR
-  #       file: ${{secrets.APP_NAME}}.aabdefaults:
+  #       file: ${{secrets.APP_NAME}}.aab
