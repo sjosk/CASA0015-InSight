@@ -4,6 +4,7 @@ GitHub 🔗 : https://github.com/sjosk/CASA0015-InSight/tree/main/insight
 Demo   🔗 : https://youtu.be/tKXNA3aKcyM  
 
 ![App Post](https://github.com/sjosk/CASA0015-InSight/blob/main/Mobile%20App%20Post.png)  
+Landing page 🔗: https://sjosk.github.io/insight/index
 
 # 👀 Introduction  
 The inspiration for this indoor navigation application arose from a classroom session where videos were shown about how blind and visually impaired individuals use smartphones. This sparked a reflection on the limitations of GPS navigation within indoor environments, particularly due to the interference caused by buildings. Observations at the UCL One Pool Street building revealed that the accessibility features are in need of improvement; there is a notable absence of tactile paving and sufficient guidance systems.   
