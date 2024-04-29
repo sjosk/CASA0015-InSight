@@ -22,7 +22,7 @@ jobs:
       - name: Set up JDK              # Setup JAVA to build the Android APK for us
         uses: actions/setup-java@v3
         with:
-          java-version: '11'
+          java-version: '17'
           distribution: microsoft
 
       #  Decode keystore File from repository secrets
@@ -47,8 +47,8 @@ jobs:
   
       - name: Create git tag
         run: |
-          git tag "v${{ steps.get_flutter_app_version.outputs.TAG_VERSION }}"
-          git push origin "v${{ steps.get_flutter_app_version.outputs.TAG_VERSION }}"
+          git tag "v1.0.3"
+          git push origin "v1.0.3"
         
       - name: Install Flutter               # Install Flutter
         uses: subosito/flutter-action@v2
