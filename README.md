@@ -52,4 +52,4 @@ The app incorporates external libraries such as Flutter Beacon for beacon intera
 
 
 # ✉️ Keep in touch  
-SJ. Wu: cepwsj@gmail.com If you'd like to contribute to the app, don't hestite to get in contact with me.
+SJ. Wu: esther@esjosk.com If you'd like to contribute to the app, don't hestite to get in contact with me.
